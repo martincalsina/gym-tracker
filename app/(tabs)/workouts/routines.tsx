@@ -1,4 +1,4 @@
-import RoutineCard from "@/app/components/workouts/routineCard";
+import RoutineCard from "@/app/components/workouts/routines/routineCard";
 import { ScrollView, StyleSheet } from "react-native";
 
 const routines: any[] = [

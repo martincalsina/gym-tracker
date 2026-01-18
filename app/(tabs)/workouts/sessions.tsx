@@ -1,4 +1,4 @@
-import SessionsList from "@/app/components/workouts/sessionsList";
+import SessionsList from "@/app/components/workouts/sessions/sessionsList";
 import { StyleSheet, View } from "react-native";
 
 const sessionsData: any[] =

@@ -1,4 +1,4 @@
-import ExerciseCard from "@/app/components/exercises/exerciseCard";
+import ExerciseCard from "@/app/components/workouts/exercises/exerciseCard";
 import { FlatList, StyleSheet } from "react-native";
 
 const exercises: any[] = [
