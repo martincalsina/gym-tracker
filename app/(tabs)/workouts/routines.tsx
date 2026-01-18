@@ -1,5 +1,6 @@
+import AddRoutineButton from "@/app/components/workouts/routines/addRoutineButton";
 import RoutineCard from "@/app/components/workouts/routines/routineCard";
-import { ScrollView, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
 const routines: any[] = [
     {
@@ -24,15 +25,19 @@ const routines: any[] = [
 
 export default function Routines() {
     return (
-        <ScrollView style={styles.container}>
-
-            {
-                routines.map((routine) => (
-                    <RoutineCard key={routine.id} routine={routine}/>
-                ))
-            }
-
-        </ScrollView>
+        <>
+            <View>
+                <AddRoutineButton />
+            </View>
+            <FlatList
+                style={styles.container}
+                data={routines}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <RoutineCard routine={item} />
+                )}
+            />
+        </>
     )
 };
 
