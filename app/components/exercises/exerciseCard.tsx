@@ -7,7 +7,7 @@ export default function ExerciseCard({exercise}: any) {
             <Card.Content>
                 <Text variant="titleSmall">{exercise.name}</Text>
             </Card.Content>
-            <Card.Cover source={{ uri: exercise.image }} />
+            <Card.Cover style={styles.cardImage} source={{ uri: exercise.image }} />
         </Card>
     )
 }
@@ -18,4 +18,8 @@ const styles = StyleSheet.create({
         padding: '1%',
         margin: '1%',
     },
+    cardImage: {
+        width: '100%',
+        height: 160,
+    }
 })
