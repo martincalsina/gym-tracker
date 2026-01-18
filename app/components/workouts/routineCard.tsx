@@ -21,7 +21,7 @@ export default function RoutineCard({ routine }: any) {
 
 const styles = StyleSheet.create({
     card: {
-        marginTop: 15,
+        marginTop: 15, 
     },
     cardImage: {
         marginHorizontal: 10,
