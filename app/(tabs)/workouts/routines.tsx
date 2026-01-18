@@ -28,7 +28,7 @@ export default function Routines() {
 
             {
                 routines.map((routine) => (
-                    <RoutineCard routine={routine}/>
+                    <RoutineCard key={routine.id} routine={routine}/>
                 ))
             }
 
@@ -39,7 +39,6 @@ export default function Routines() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 20,
         paddingHorizontal: 15
     },
 })

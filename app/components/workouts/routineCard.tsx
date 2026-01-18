@@ -1,4 +1,5 @@
-import { Button, Card, Text } from 'react-native-paper'
+import { StyleSheet } from 'react-native';
+import { Button, Card, Text } from 'react-native-paper';
 
 export default function RoutineCard({ routine }: any) {
 
@@ -9,20 +10,24 @@ export default function RoutineCard({ routine }: any) {
                 <Text variant="bodyMedium">{routine.note}</Text>
             </Card.Content>
             <Card.Cover style={styles.cardImage} source={{ uri: routine.image }} />
-            <Card.Actions>
-                <Button>Cancel</Button>
-                <Button>Ok</Button>
+            <Card.Actions style={styles.optionsContainer}>
+                <Button>More</Button>
+                <Button>Go</Button>
             </Card.Actions>
         </Card>
     )
 
 }
 
-const styles = {
+const styles = StyleSheet.create({
     card: {
         marginTop: 15,
     },
     cardImage: {
         marginHorizontal: 10,
+    },
+    optionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     }
-}
+});
