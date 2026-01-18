@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Text, View } from 'react-native';
 import { List } from 'react-native-paper';
 
 type Props = {
@@ -23,9 +22,17 @@ export default function SessionsList({sessionsData}: Props  ) {
             )
           }
         >
-          <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
-            <Text>hola</Text>
-          </View>
+            { 
+              session.realizedExercices.map((ex: any) => {
+                let weights: any[] = ex.sets.map ((set: any) => set.weight);
+                let reps: any[] = ex.sets.map((set: any) => set.reps);
+                let numberSets: number = weights.length;
+                let quickDescription = `${ex.exercise}  ${numberSets} x ${weights.join('-')}kg x ${reps.join('-')}`;
+                return (<List.Item
+                  title={quickDescription}
+                />)
+              })
+            } 
         </List.Accordion>
       ))}
     </List.Section>
