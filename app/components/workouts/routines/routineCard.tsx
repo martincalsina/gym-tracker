@@ -9,7 +9,7 @@ export default function RoutineCard({ routine }: any) {
                 <Text variant="titleLarge">{routine.name}</Text>
                 <Text variant="bodyMedium">{routine.note}</Text>
             </Card.Content>
-            <Card.Cover style={styles.cardImage} source={{ uri: routine.image }} />
+            <Card.Cover style={styles.cardImage} source={{ uri: routine.cover }} />
             <Card.Actions style={styles.optionsContainer}>
                 <Button>More</Button>
                 <Button>Go</Button>

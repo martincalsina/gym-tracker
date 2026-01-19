@@ -31,3 +31,19 @@ export async function createRoutine(routine: Routine) {
     return result.lastInsertRowId;
 
 }
+
+export async function getRoutine(id: number) {
+    let db = await getDb();
+    const routine: Routine | null = await db.getFirstAsync<Routine>(`
+            SELECT * FROM routine AS r WHERE r.id = ${id}; 
+        `);
+    return routine;
+}
+
+export async function getAllRoutines() {
+    let db = await getDb();
+    const routines: Routine[] = await db.getAllAsync<Routine>(`
+            SELECT * FROM routine;
+        `); 
+    return routines;
+}

@@ -3,14 +3,13 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import CreateRoutineModal from './createRoutineModal';
 
-
-export default function addRoutineButton() {
+export default function addRoutineButton({onAdd}: any) {
 
     const [modalVisible, setModalVisible] = useState(false);
 
     return (
         <>
-            <CreateRoutineModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <CreateRoutineModal onAdd={onAdd} modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <View style={styles.buttonContainer}>
                 <Pressable
                     style={[styles.button, styles.buttonOpen]}

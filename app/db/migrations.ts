@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
-const __DEV__ = true;
+const __DEV__ = false;
 
 type Migration = {
     version: number;

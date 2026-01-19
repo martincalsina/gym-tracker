@@ -1,4 +1,4 @@
-import { createRoutine, Routine } from '@/app/db/database';
+import { createRoutine, getRoutine, Routine } from '@/app/db/database';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
@@ -7,11 +7,12 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 type Props = {
     modalVisible: boolean;
     setModalVisible: ((arg: boolean) => void);
+    onAdd: ((arg: any) => void);
 }
 
 const DEFAULT_COVER: string = "https://picsum.photos/700";
 
-export default function CreateRoutineModal({modalVisible, setModalVisible}: Props) {
+export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd}: Props) {
 
 
     const [routineName, setRoutineName] = useState("");
@@ -32,6 +33,8 @@ export default function CreateRoutineModal({modalVisible, setModalVisible}: Prop
         let newRoutineId: number = await createRoutine(routine);
         console.log(`New routine has id: ${newRoutineId}`);
         closeModal();
+        let newRoutine: Routine | null = await getRoutine(newRoutineId);
+        onAdd(newRoutine);
     }
 
     return (
