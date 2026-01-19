@@ -70,6 +70,39 @@ const migrations: Migration[] = [
                 );
             `);
         }
+    },
+    {
+        version: 6,
+        description: "create realizedExercise table",
+        up: async (db) => {
+            await db.execAsync(`
+                CREATE TABLE realizedExercise (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    exerciseNumber INTEGER NOT NULL,
+                    notes TEXT,
+                    session_id INTEGER NOT NULL,
+                    FOREIGN KEY(session_id) REFERENCES workoutSession(id)
+                );
+            `);
+        }
+    },
+    {
+        version: 7,
+        description: "create workingSet table",
+        up: async (db) => {
+            await db.execAsync(`
+                CREATE TABLE 'workingSet' (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    weight NUMERIC NOT NULL,
+                    reps INTEGER NOT NULL,
+                    setNumber INTEGER NOT NULL,
+                    restAfter NUMERIC DEFAULT 0 NOT NULL,
+                    rir INTEGER,
+                    realizedExercise_id INTEGER NOT NULL,
+                    FOREIGN KEY(realizedExercise_id) REFERENCES realizedExercise(id)
+                );    
+            `);
+        }
     }
 ];
 
