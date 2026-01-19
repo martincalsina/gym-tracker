@@ -1,55 +1,44 @@
+import AddExerciseButton from "@/app/components/workouts/exercises/addExerciseButton";
 import ExerciseCard from "@/app/components/workouts/exercises/exerciseCard";
-import { FlatList, StyleSheet } from "react-native";
+import { Exercise, getAllExercises } from "@/app/db/database";
+import { useEffect, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
 
-const exercises: any[] = [
-    {
-        id: 1,
-        name: "Squat",
-        image: "https://picsum.photos/700",
-    },
-    {
-        id: 2,
-        name: "Deadlift",
-        image: "https://picsum.photos/700",
-    },
-    {
-        id: 3,
-        name: "Pull Up",
-        image: "https://picsum.photos/700",
-    },
-    {
-        id: 4,
-        name: "Bench Press",
-        image: "https://picsum.photos/700",
-    },
-    {
-        id: 5,
-        name: "Rows",
-        image: "https://picsum.photos/700",
-    },
-    {
-        id: 6,
-        name: "Overhead Press",
-        image: "https://picsum.photos/700",
-    },
-    {
-        id: 7,
-        name: "Seated Leg Curl",
-        image: "https://picsum.photos/700",
-    }
-];
 
 export default function Exercises() {
+
+    const [exercises, setExercises] = useState<Exercise[]>([]); 
+
+    function addExercise(newExercise: Exercise) {
+        setExercises([...exercises, newExercise]);
+    }
+
+    useEffect(() => {
+
+        async function loadExercises() {
+            let data: Exercise[] = await getAllExercises();
+            setExercises(data);
+        }
+
+        loadExercises();
+
+    });
+
     return (
+        <>
+        <View>
+            <AddExerciseButton onAdd={addExercise}/>
+        </View>
         <FlatList
             style={styles.container}
             data={exercises}
-            keyExtractor={(ex) => ex.id.toString()}
+            keyExtractor={(ex) => ex.id!.toString()}
             numColumns={2}
             renderItem={({item}) => (
                 <ExerciseCard exercise={item}/>
         )}
         />
+        </>
     )
 };
 

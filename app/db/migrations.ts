@@ -30,7 +30,7 @@ const migrations: Migration[] = [
             await db.execAsync(`
                 CREATE TABLE exercise (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL
+                    name TEXT NOT NULL,
                     description TEXT,
                     cover NOT NULL
                 );    

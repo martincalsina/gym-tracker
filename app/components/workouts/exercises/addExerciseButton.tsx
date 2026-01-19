@@ -1,0 +1,44 @@
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useState } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import CreateExerciseModal from './createExerciseModal';
+
+export default function addExerciseButton({onAdd}: any) {
+
+    const [modalVisible, setModalVisible] = useState(false);
+
+    return (
+        <>
+            <CreateExerciseModal onAdd={onAdd} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <View style={styles.buttonContainer}>
+                <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => setModalVisible(true)}>
+                    <AntDesign name="plus" size={15} color="black" />
+                </Pressable>
+            </View>
+        </>
+    );
+}
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    paddingHorizontal: 15,
+    paddingTop: 15,
+  },
+  button: {
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonOpen: {
+    backgroundColor: '#b5b5b5ff',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});

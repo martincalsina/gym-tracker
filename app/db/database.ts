@@ -49,3 +49,38 @@ export async function getAllRoutines() {
         `); 
     return routines;
 }
+
+// EXERCISE
+
+export type Exercise = {
+    id?: number;
+    name: string;
+    description: string;
+    cover: string;
+}
+
+export async function createExercise(exercise: Exercise) {
+
+    let db = await getDb();
+    const result = await db.runAsync(`
+        INSERT INTO exercise (name, description, cover) VALUES (?, ?, ?);
+    `, [exercise.name, exercise.description, exercise.cover]);
+    return result.lastInsertRowId;
+
+}
+
+export async function getExercise(id: number) {
+    let db = await getDb();
+    const exercise: Exercise | null = await db.getFirstAsync<Exercise>(`
+        SELECT * FROM exercise AS e WHERE e.id = ${id};
+    `)
+    return exercise
+}
+
+export async function getAllExercises() {
+    let db = await getDb();
+    const exercises: Exercise[] = await db.getAllAsync<Exercise>(`
+        SELECT * FROM exercise;    
+    `);
+    return exercises;
+}
