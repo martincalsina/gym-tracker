@@ -35,6 +35,40 @@ const migrations: Migration[] = [
                     cover NOT NULL
                 );    
             `);
+        },
+    },
+    {
+        version: 3,
+        description: "activate foreign keys",
+        up: async (db) => {
+            await db.execAsync(`PRAGMA foreign_keys = 1;`)
+        },
+
+    },
+    {
+        version: 4,
+        description: "create tag table",
+        up: async (db) => {
+            await db.execAsync(`
+                CREATE TABLE tag (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL
+                );    
+            `);
+        }
+    },
+    {
+        version: 5,
+        description: "create session table",
+        up: async (db) => {
+            await db.execAsync(`
+                CREATE TABLE workoutSession (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    date TEXT NOT NULL,
+                    tag_id INTEGER,
+                    FOREIGN KEY(tag_id) REFERENCES tag(id)
+                );
+            `);
         }
     }
 ];
