@@ -7,7 +7,6 @@ import { FlatList, StyleSheet, View } from "react-native";
 export default function Routines() {
 
     const [routines, setRoutines] = useState<Routine[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
   

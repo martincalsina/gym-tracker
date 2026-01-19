@@ -23,6 +23,20 @@ const migrations: Migration[] = [
             `);
         },
     },
+    {
+        version: 2,
+        description: "create exercise table",
+        up: async (db) => {
+            await db.execAsync(`
+                CREATE TABLE exercise (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL
+                    description TEXT,
+                    cover NOT NULL
+                );    
+            `);
+        }
+    }
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase) {

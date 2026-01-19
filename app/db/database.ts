@@ -21,6 +21,8 @@ export type Routine = {
     cover: string;
 }
 
+// ROUTINE
+
 export async function createRoutine(routine: Routine) {
 
     let db = await getDb();
