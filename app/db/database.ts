@@ -3,7 +3,6 @@ import { runMigrations } from './migrations';
 
 let db: SQLite.SQLiteDatabase | null = null;
 
-// fun de uso interno
 async function getDb() {
 
     if (!db) {
@@ -12,5 +11,23 @@ async function getDb() {
     }
 
     return db;
+
+}
+
+export type Routine = {
+    id?: number;
+    name: string;
+    description: string;
+    cover: string;
+}
+
+export async function createRoutine(routine: Routine) {
+
+    let db = await getDb();
+    const result = await db.runAsync(`
+            INSERT INTO routine (name, description, cover) VALUES (?, ?, ?);
+        `, [routine.name, routine.description, routine.cover]);
+    
+    return result.lastInsertRowId;
 
 }

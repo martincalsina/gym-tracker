@@ -1,3 +1,4 @@
+import { createRoutine, Routine } from '@/app/db/database';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
@@ -8,22 +9,29 @@ type Props = {
     setModalVisible: ((arg: boolean) => void);
 }
 
+const DEFAULT_COVER: string = "https://picsum.photos/700";
+
 export default function CreateRoutineModal({modalVisible, setModalVisible}: Props) {
 
 
     const [routineName, setRoutineName] = useState("");
-    const [description, setDescription] = useState("");
+    const [routineDescription, setRoutineDescription] = useState("");
 
     function closeModal() {
         setRoutineName("");
-        setDescription("");
+        setRoutineDescription("");
         setModalVisible(false);
     }
 
-    function saveRoutine() {
-        console.log(`Routine name: ${routineName}`);
-        console.log(`Routine description: ${description}`);
-        closeModal()
+    async function saveRoutine() {
+        let routine: Routine = {
+          name: routineName,
+          description: routineDescription,
+          cover: DEFAULT_COVER,
+        };
+        let newRoutineId: number = await createRoutine(routine);
+        console.log(`New routine has id: ${newRoutineId}`);
+        closeModal();
     }
 
     return (
@@ -52,8 +60,8 @@ export default function CreateRoutineModal({modalVisible, setModalVisible}: Prop
                                 numberOfLines={6}
                                 mode='outlined'
                                 label="Description"
-                                value={description}
-                                onChangeText={text => setDescription(text)}
+                                value={routineDescription}
+                                onChangeText={text => setRoutineDescription(text)}
                             />
                             <View style={styles.buttonsContainer}>
                                 <Pressable
