@@ -84,3 +84,90 @@ export async function getAllExercises() {
     `);
     return exercises;
 }
+
+// SESSION
+
+export type Tag = {
+    id?: number;
+    name: string;
+};
+
+export type WorkingSet = {
+    id?: number;
+    weight: number;
+    reps: number;
+    setNumber: number;
+    restAfter: number;
+    rir: number;
+};
+
+export async function createWorkingSet(workingSet: WorkingSet, realizedExerciseId: number) {
+    
+    let db = await getDb();
+
+    const result = await db.runAsync(`
+        INSERT INTO workingSet (weight, reps, setNumber, restAfter, rir, realizedExercise_id) VALUES (?, ?, ?, ?, ?, ?);
+    `, [workingSet.weight, workingSet.reps, workingSet.setNumber, workingSet.restAfter, workingSet.rir, realizedExerciseId]);
+    
+    let workingSetId = result.lastInsertRowId;
+
+    return workingSetId;
+}
+
+export type RealizedExercise = {
+    id?: number;
+    exerciseNumber: number;
+    exercise: Exercise;
+    notes: string;
+    workingSets: WorkingSet[]; 
+};
+
+export async function createRealizedExercise(realizedExercise: RealizedExercise, sessionId: number) {
+
+    let db = await getDb();
+
+    const result = await db.runAsync(`
+        INSERT INTO realizedExercise (exerciseNumber, notes, session_id) VALUES (?, ?, ?);
+    `, [realizedExercise.exerciseNumber, realizedExercise.notes, sessionId]);
+
+    
+    const realizedExerciseId = result.lastInsertRowId;
+
+    await Promise.all(realizedExercise.workingSets.map(async (wset) => createWorkingSet(wset, realizedExerciseId)));
+
+    return realizedExerciseId;
+
+}
+
+export type Session = {
+    id?: number;
+    date: string;
+    tag?: Tag;
+    realizedExercises: RealizedExercise[];
+};
+
+export async function createSession(session: Session) {
+    
+    let db = await getDb();
+
+    const result = await db.runAsync(`
+        INSERT INTO workoutSession (date, tag_id) VALUES (?, ?);
+    `, [session.date, session.tag?.id ?? null]);
+    
+    const sessionId: number = result.lastInsertRowId;
+
+    await Promise.all(session.realizedExercises.map(async (rex) => createRealizedExercise(rex, sessionId)));
+
+    return sessionId;
+}
+
+type SessionRow = {
+    id: number;
+    date: string;
+    tag_id: number | null;
+}
+
+export async function getAllSessions() {
+
+    return [];
+}

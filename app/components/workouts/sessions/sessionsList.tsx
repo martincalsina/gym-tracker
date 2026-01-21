@@ -1,9 +1,10 @@
+import { Session } from '@/app/db/database';
 import { useState } from 'react';
 import { List } from 'react-native-paper';
 import SessionDescription from './sessionDescription';
 
 type Props = {
-  sessionsData: any[];
+  sessionsData: Session[];
 }
 
 export default function SessionsList({sessionsData}: Props  ) {
@@ -14,12 +15,12 @@ export default function SessionsList({sessionsData}: Props  ) {
       {sessionsData.map(session => (
         <List.Accordion
           key={session.id}
-          title={`${session.date} - ${session.routine}`}
-          description={session.tag}
-          expanded={expandedId === session.id}
+          title={`${session.date} - RUTINA`}
+          description={session.tag?.name}
+          expanded={expandedId === session.id?.toString()}
           onPress={() =>
             setExpandedId(
-              expandedId === session.id ? null : session.id
+              expandedId === session.id!.toString() ? null : session.id!.toString()
             )
           }
         >

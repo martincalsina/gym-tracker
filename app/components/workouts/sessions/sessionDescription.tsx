@@ -1,18 +1,23 @@
+import { RealizedExercise, Session } from '@/app/db/database';
 import { List } from 'react-native-paper';
 
-export default function sessionDescription({session}: any) {
+type Props = {
+    session: Session;
+}
+
+export default function sessionDescription({session}: Props) {
     
     return (
         <>
         {
-            session.realizedExercices.map((ex: any) => 
+            session.realizedExercises.map((ex: RealizedExercise) => 
                 {
-                let weights: any[] = ex.sets.map ((set: any) => set.weight);
-                let reps: any[] = ex.sets.map((set: any) => set.reps);
+                let weights: number[] = ex.workingSets.map ((set: any) => set.weight);
+                let reps: number[] = ex.workingSets.map((set: any) => set.reps);
                 let numberSets: number = weights.length;
-                let quickDescription = `${ex.exercise}  ${numberSets} x ${weights.join('-')}kg x ${reps.join('-')}`;
+                let quickDescription = `${ex.exercise.name}  ${numberSets} x ${weights.join('-')}kg x ${reps.join('-')}`;
                 return (
-                    <List.Item key={ex.exercise} title={quickDescription}/>
+                    <List.Item key={ex.exerciseNumber} title={quickDescription}/>
                 )
                 }
             )

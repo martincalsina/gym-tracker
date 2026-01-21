@@ -1,4 +1,4 @@
-import SectionButtons from '@/app/components/workouts/sessions/sectionButtons';
+import SectionButtons from '@/app/components/workouts/sectionButtons';
 import { Slot } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 

@@ -91,7 +91,7 @@ const migrations: Migration[] = [
         description: "create workingSet table",
         up: async (db) => {
             await db.execAsync(`
-                CREATE TABLE 'workingSet' (
+                CREATE TABLE workingSet (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     weight NUMERIC NOT NULL,
                     reps INTEGER NOT NULL,
@@ -109,7 +109,12 @@ const migrations: Migration[] = [
 export async function runMigrations(db: SQLite.SQLiteDatabase) {
 
     if (__DEV__) {
+        await db.execAsync(`DROP TABLE workingSet`)
+        await db.execAsync(`DROP TABLE realizedExercise`);
+        await db.execAsync(`DROP TABLE exercise`)
         await db.execAsync(`DROP TABLE routine`);
+        await db.execAsync(`DROP TABLE workoutSession`)
+        await db.execAsync(`DROP TABLE tag`);
         await db.execAsync(`PRAGMA user_version = 0`);
     }
 
@@ -129,5 +134,7 @@ export async function runMigrations(db: SQLite.SQLiteDatabase) {
         }
 
     }
+
+    console.log(`Current migration version: ${current_version}`)
 
 }
