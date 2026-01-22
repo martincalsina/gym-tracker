@@ -98,7 +98,7 @@ export type WorkingSet = {
     reps: number;
     setNumber: number;
     restAfter: number;
-    rir: number;
+    rir: number | null;
 };
 
 export async function createWorkingSet(workingSet: WorkingSet, realizedExerciseId: number) {
@@ -142,7 +142,7 @@ export async function createRealizedExercise(realizedExercise: RealizedExercise,
 export type Session = {
     id?: number;
     date: string;
-    tag?: Tag;
+    tag: Tag | null;
     realizedExercises: RealizedExercise[];
 };
 
@@ -167,7 +167,129 @@ type SessionRow = {
     tag_id: number | null;
 }
 
+
+async function getTagById(id: number) {
+    
+    const db = await getDb();
+
+    const tag: Tag | null = await db.getFirstAsync<Tag>(`
+        SELECT * FROM tag AS t WHERE t.id = ?;
+    `, id);
+
+    return tag;
+}
+
+async function getExerciseById(id: number) {
+
+    const db = await getDb();
+
+    const exercise: Exercise = await db.getFirstSync<Exercise>(`
+        SELECT * FROM exercise AS e WHERE e.id = ?;
+    `, id) ?? {name: "null", description: "null", cover: "null"};
+    
+    return exercise;
+}
+
+type WorkingSetRow = {
+    id: number;
+    weight: number;
+    reps: number;
+    setNumber: number;
+    restAfter: number;
+    rir: number | null;
+    realizedExercise_id: number;
+}
+
+async function getWorkingSetsByRealizedExerciseId(id: number) {
+
+    const db = await getDb();
+    
+    const workingSetRows: WorkingSetRow[] = await db.getAllAsync(`
+        SELECT * FROM workingSet AS w WHERE w.id = ?
+    `, id);
+
+    const workingSets: WorkingSet[] = workingSetRows.map((workingSetRow) => {
+        const workingSet: WorkingSet = {
+            id: workingSetRow.id,
+            weight: workingSetRow.weight,
+            reps: workingSetRow.reps,
+            setNumber: workingSetRow.setNumber,
+            restAfter: workingSetRow.restAfter,
+            rir: workingSetRow.rir,
+        }
+        return workingSet;
+    })
+
+    return workingSets;
+
+}
+
+type RealizedExerciseRow = {
+    id: number;
+    exerciseNumber: number;
+    notes: string;
+    session_id: string;
+    exercise_id: number;
+}
+
+async function getRealizedExercisesBySessionId(id: number) {
+
+    const db = await getDb();
+
+    const realizedExerciseRows: RealizedExerciseRow[] = await db.getAllAsync<RealizedExerciseRow>(`
+        SELECT * FROM realizedExercise AS r WHERE r.id = ?;
+    `, id);
+
+    const realizedExercises: RealizedExercise[] = await Promise.all(
+        realizedExerciseRows.map(async (realizedExerciseRow: RealizedExerciseRow) => {
+
+            const [exercise, workingSets] = await Promise.all([
+                getExerciseById(realizedExerciseRow.exercise_id),
+                getWorkingSetsByRealizedExerciseId(realizedExerciseRow.id)
+            ])
+
+            const realizedExercise: RealizedExercise = {
+                id: realizedExerciseRow.id,
+                exerciseNumber: realizedExerciseRow.exerciseNumber,
+                exercise: exercise,
+                notes: realizedExerciseRow.notes,
+                workingSets: workingSets
+            } 
+
+            return realizedExercise;
+        })
+    )
+
+    return realizedExercises;
+
+}
+
 export async function getAllSessions() {
 
-    return [];
+    const db = await getDb();
+
+    const sessionRows: SessionRow[] = await db.getAllAsync<SessionRow>(`
+        SELECT * FROM workoutSession;
+    `);
+
+    const sessions: Session[] = await Promise.all(sessionRows.map(async (sessionRow: SessionRow) => {
+        const [realizedExercises, tag] = await Promise.all(
+            [
+                getRealizedExercisesBySessionId(sessionRow.id), 
+                sessionRow.tag_id ? getTagById(sessionRow.tag_id) : null
+            ]
+        );
+
+        const session: Session = {
+            id: sessionRow.id,
+            date: sessionRow.date,
+            tag: tag,
+            realizedExercises: realizedExercises
+        };
+
+        return session;
+        }
+    ));
+
+    return sessions;
 }

@@ -103,7 +103,16 @@ const migrations: Migration[] = [
                 );    
             `);
         }
-    }
+    },
+    {
+        version: 8,
+        description: "add exercise_id column to realizedExercise table",
+        up: async (db) => {
+            await db.execAsync(`
+                ALTER TABLE realizedExercise ADD COLUMN exercise_id INTEGER REFERENCES exercise(id);
+            `);
+        }
+    },
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase) {
