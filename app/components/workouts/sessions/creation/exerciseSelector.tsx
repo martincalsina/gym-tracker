@@ -1,4 +1,4 @@
-import { Exercise } from "@/app/db/Exercise";
+import { Exercise } from "@/app/db/model/Exercise";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { Modal } from "react-native";

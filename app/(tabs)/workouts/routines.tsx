@@ -1,6 +1,6 @@
 import AddRoutineButton from "@/app/components/workouts/routines/addRoutineButton";
 import RoutineCard from "@/app/components/workouts/routines/routineCard";
-import { getAllRoutines, Routine } from '@/app/db/Routine';
+import { getAllRoutines, Routine } from '@/app/db/model/Routine';
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 

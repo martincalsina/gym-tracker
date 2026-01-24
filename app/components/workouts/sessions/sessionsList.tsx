@@ -1,4 +1,4 @@
-import { Session } from '@/app/db/Session';
+import { Session } from '@/app/db/model/Session';
 import { useState } from 'react';
 import { List } from 'react-native-paper';
 import SessionDescription from './sessionDescription';

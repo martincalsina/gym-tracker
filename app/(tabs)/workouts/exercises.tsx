@@ -1,6 +1,6 @@
 import AddExerciseButton from "@/app/components/workouts/exercises/addExerciseButton";
 import ExerciseCard from "@/app/components/workouts/exercises/exerciseCard";
-import { Exercise, getAllExercises } from '@/app/db/Exercise';
+import { Exercise, getAllExercises } from '@/app/db/model/Exercise';
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 

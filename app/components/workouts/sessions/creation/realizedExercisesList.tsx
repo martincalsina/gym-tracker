@@ -1,5 +1,5 @@
-import { RealizedExercise } from '@/app/db/RealizedExercise';
-import { WorkingSet } from '@/app/db/WorkingSet';
+import { RealizedExercise } from '@/app/db/model/RealizedExercise';
+import { WorkingSet } from '@/app/db/model/WorkingSet';
 import { StyleSheet } from 'react-native';
 import { Button, List, Text } from 'react-native-paper';
 import WorkingSetDataInput from './workingSetDataInput';

@@ -1,4 +1,4 @@
-import { getDb } from './global';
+import { getDb } from '../global';
 
 export type Exercise = {
     id?: number;

@@ -1,7 +1,7 @@
-import { Exercise, getAllExercises } from '@/app/db/Exercise';
-import { RealizedExercise } from '@/app/db/RealizedExercise';
-import { getAllRoutines, Routine } from '@/app/db/Routine';
-import { createSession, Session } from '@/app/db/Session';
+import { Exercise, getAllExercises } from '@/app/db/model/Exercise';
+import { RealizedExercise } from '@/app/db/model/RealizedExercise';
+import { getAllRoutines, Routine } from '@/app/db/model/Routine';
+import { createSession, Session } from '@/app/db/model/Session';
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';

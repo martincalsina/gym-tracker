@@ -1,4 +1,4 @@
-import { Routine } from "@/app/db/Routine";
+import { Routine } from "@/app/db/model/Routine";
 import { Picker } from "@react-native-picker/picker";
 import { Text } from 'react-native-paper';
 

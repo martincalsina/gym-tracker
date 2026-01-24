@@ -1,5 +1,5 @@
+import { getDb } from '../global';
 import { Exercise, getExerciseById } from './Exercise';
-import { getDb } from './global';
 import { WorkingSet, createWorkingSet, getWorkingSetsByRealizedExerciseId } from './WorkingSet';
 
 // React usage type
