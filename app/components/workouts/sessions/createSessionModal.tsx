@@ -1,4 +1,8 @@
-import { createSession, Exercise, getAllExercises, getAllRoutines, RealizedExercise, Routine, Session, WorkingSet } from '@/app/db/database';
+import { Exercise, getAllExercises } from '@/app/db/Exercise';
+import { RealizedExercise } from '@/app/db/RealizedExercise';
+import { getAllRoutines, Routine } from '@/app/db/Routine';
+import { createSession, Session } from '@/app/db/Session';
+import { WorkingSet } from '@/app/db/WorkingSet';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from 'react';
@@ -161,6 +165,9 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
         const newSession: Session = {
           date: sessionDate.getDate().toString(),
           realizedExercises: realizedExercises,
+          tag: {
+            name: "null"
+          }
         };
 
         const sessionId: number = await createSession(newSession);

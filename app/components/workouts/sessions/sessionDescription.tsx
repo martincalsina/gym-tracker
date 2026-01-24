@@ -1,4 +1,5 @@
-import { RealizedExercise, Session } from '@/app/db/database';
+import { RealizedExercise } from '@/app/db/RealizedExercise';
+import { Session } from '@/app/db/Session';
 import { List } from 'react-native-paper';
 
 type Props = {

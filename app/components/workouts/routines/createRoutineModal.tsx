@@ -1,4 +1,4 @@
-import { createRoutine, getRoutine, Routine } from '@/app/db/database';
+import { createRoutine, getRoutine, Routine } from '@/app/db/Routine';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';

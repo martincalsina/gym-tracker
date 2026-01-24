@@ -1,4 +1,4 @@
-import { Exercise } from '@/app/db/database';
+import { Exercise } from '@/app/db/Exercise';
 import { StyleSheet } from 'react-native';
 import { Card, Text } from "react-native-paper";
 

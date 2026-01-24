@@ -1,4 +1,4 @@
-import { createExercise, Exercise, getExercise } from '@/app/db/database';
+import { createExercise, Exercise, getExercise } from '@/app/db/Exercise';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
