@@ -33,6 +33,7 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
     const [realizedExercises, setRealizedExercises] = useState<RealizedExercise[]>([]);
 
   useEffect(() => {
+    
     async function load() {
       const [routinesData, exercisesData] = await Promise.all([
         getAllRoutines(),

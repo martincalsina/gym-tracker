@@ -3,11 +3,12 @@ import { runMigrations } from './migrations';
 
 let db: SQLite.SQLiteDatabase | null = null;
 
-const __DEBUG__ = true;
+const __DEBUG__ = false;
 
 export async function getDb() {
 
     if (!db) {
+        
         db = await SQLite.openDatabaseAsync('gym-tracker.db');
         await runMigrations(db);
         

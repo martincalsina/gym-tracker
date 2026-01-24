@@ -1,4 +1,4 @@
-import { getDb } from './database';
+import { getDb } from './global';
 import { createRealizedExercise, getRealizedExercisesBySessionId, RealizedExercise } from './RealizedExercise';
 import { getTagById, Tag } from './Tag';
 
