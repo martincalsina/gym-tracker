@@ -1,7 +1,7 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import CreateSessionModal from "./createSessionModal";
+import CreateSessionModal from "./creation/createSessionModal";
 
 export default function addSessionButton({onAdd}: any) {
 

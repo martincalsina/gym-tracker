@@ -1,4 +1,4 @@
-import { createExercise, Exercise, getExercise } from '@/app/db/Exercise';
+import { createExercise, Exercise, getExerciseById } from '@/app/db/Exercise';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
@@ -33,7 +33,7 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
         let newExerciseId: number = await createExercise(exercise);
         console.log(`New exercise has id: ${newExerciseId}`);
         closeModal();
-        let newExercise: Exercise | null = await getExercise(newExerciseId);
+        let newExercise: Exercise | null = await getExerciseById(newExerciseId);
         onAdd(newExercise);
     }
 

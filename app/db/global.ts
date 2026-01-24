@@ -8,11 +8,13 @@ const __DEBUG__ = false;
 export async function getDb() {
 
     if (!db) {
-        
+
         db = await SQLite.openDatabaseAsync('gym-tracker.db');
         await runMigrations(db);
         
         if (__DEBUG__) {
+
+            await db.execAsync(`DELETE FROM workoutSession WHERE 1 = 1;`);
             
             console.log("WORKOUT SESSIONS:")
             console.log(
