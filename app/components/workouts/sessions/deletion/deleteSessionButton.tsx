@@ -5,10 +5,9 @@ import DeleteSessionModal from "./deleteSessionModal";
 
 type Props = {
     session: Session;
-    loadSessions: () => void;
 }
 
-export default function deleteSessionSection({session, loadSessions}: Props) {
+export default function deleteSessionSection({session}: Props) {
 
     const [deleteSessionModalVisible, setDeleteSessionModalVisible] = useState<boolean>(false);
     
@@ -17,7 +16,6 @@ export default function deleteSessionSection({session, loadSessions}: Props) {
     return (
         <>  
             <DeleteSessionModal session={session} 
-            loadSessions={loadSessions}
             deleteSessionModalVisible={deleteSessionModalVisible} setDeleteSessionModalVisible={setDeleteSessionModalVisible}/>
             <IconButton onPress={() => {setDeleteSessionModalVisible(true)}} size={20} icon='trash-can-outline'/>    
         </>

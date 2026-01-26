@@ -1,4 +1,6 @@
+import { SessionsContext } from "@/app/(tabs)/workouts/sessionsContext";
 import { deleteSessionById, Session } from "@/app/db/model/Session";
+import { useContext } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button, Text } from 'react-native-paper';
 
@@ -6,11 +8,12 @@ type Props = {
     session: Session;
     deleteSessionModalVisible: boolean;
     setDeleteSessionModalVisible: (arg: boolean) => void;
-    loadSessions: () => void;
 }
 
-export default function DeleteSessionModal({session, deleteSessionModalVisible, setDeleteSessionModalVisible, loadSessions}: Props) {
+export default function DeleteSessionModal({session, deleteSessionModalVisible, setDeleteSessionModalVisible}: Props) {
     
+    const loadSessions = useContext(SessionsContext);
+
     function closeDeleteSessionModal() {
         setDeleteSessionModalVisible(false);
     }

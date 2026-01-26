@@ -7,10 +7,9 @@ import SessionDescription from './sessionDescription';
 
 type Props = {
   sessionsData: Session[];
-  loadSessions: () => void;
 }
 
-export default function SessionsList({sessionsData, loadSessions}: Props  ) {
+export default function SessionsList({sessionsData}: Props  ) {
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -23,7 +22,7 @@ export default function SessionsList({sessionsData, loadSessions}: Props  ) {
           <>
               <View style={styles.buttonsContainer}>
                   <IconButton onPress={() => {}} size={20} icon='pencil-outline'/>
-                  <DeleteSessionButton loadSessions={loadSessions} session={item}/>
+                  <DeleteSessionButton session={item}/>
                   
               </View>
               <List.Accordion

@@ -1,12 +1,15 @@
 import AddSessionButton from "@/app/components/workouts/sessions/addSessionButton";
 import SessionsList from "@/app/components/workouts/sessions/sessionsList";
 import { getAllSessions, Session } from '@/app/db/model/Session';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { SessionsContext } from "./sessionsContext";
 
 
 
 export default function Sessions() {
+
+    const updateSessions = useContext(SessionsContext); 
 
     const [sessions, setSessions] = useState<Session[]>([]);
 
@@ -29,11 +32,12 @@ export default function Sessions() {
 
     return (
         <>
-            <View >
-                <AddSessionButton onAdd={addSession}/>
-            </View>
-            <SessionsList loadSessions={loadSessions} sessionsData={sessions}/>
-            
+            <SessionsContext value={loadSessions}>
+                <View>
+                    <AddSessionButton onAdd={addSession}/>
+                </View>
+                <SessionsList sessionsData={sessions}/>
+            </SessionsContext>
         </>
     )
 };
