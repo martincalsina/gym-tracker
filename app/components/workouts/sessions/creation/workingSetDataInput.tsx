@@ -1,7 +1,7 @@
 import { RealizedExercise } from "@/app/db/model/RealizedExercise";
 import { WorkingSet } from "@/app/db/model/WorkingSet";
-import { StyleSheet, View } from "react-native";
-import { TextInput } from "react-native-paper";
+import { StyleSheet } from "react-native";
+import { DataTable, TextInput } from "react-native-paper";
 
 type Props = {
     set: WorkingSet;
@@ -14,24 +14,31 @@ export default function WorkingSetDataInput({set, ex, updateSetReps, updateSetWe
 
     return (
         <>
-            <View key={set.setNumber}>
-                <TextInput
-                    key={1}
-                    style={styles.input}
-                    onChangeText={(newReps) => updateSetReps(+newReps, set.setNumber, ex.exerciseNumber)}
-                    value={set.reps.toString()}
-                    placeholder="reps"
-                    keyboardType='numeric'
-                />
-                <TextInput
-                    key={2}
-                    style={styles.input}
-                    onChangeText={(newWeight) => updateSetWeight(+newWeight, set.setNumber, ex.exerciseNumber)}
-                    value={set.weight.toString()}
-                    placeholder="weight"
-                    keyboardType="numeric"
-                />
-            </View>
+            <DataTable.Row key={set.setNumber}>
+                <DataTable.Cell>{set.setNumber}</DataTable.Cell>
+                <DataTable.Cell>
+                        <TextInput
+                        key={1}
+                        mode="outlined"
+                        style={styles.input}
+                        onChangeText={(newReps) => updateSetReps(+newReps, set.setNumber, ex.exerciseNumber)}
+                        value={set.reps.toString()}
+                        placeholder="reps"
+                        keyboardType='numeric'
+                        />
+                </DataTable.Cell>
+                <DataTable.Cell>
+                    <TextInput
+                        key={2}
+                        mode="outlined"
+                        style={styles.input}
+                        onChangeText={(newWeight) => updateSetWeight(+newWeight, set.setNumber, ex.exerciseNumber)}
+                        value={set.weight.toString()}
+                        placeholder="weight"
+                        keyboardType="numeric"
+                        />
+                </DataTable.Cell>
+            </DataTable.Row>
         </>
     )
 
@@ -39,7 +46,8 @@ export default function WorkingSetDataInput({set, ex, updateSetReps, updateSetWe
 
 const styles = StyleSheet.create({
     input: {
-    width: '100%',
-    marginBottom: 12,
-    },
+        height: 10,
+        backgroundColor: '#ffffff00',
+        width: '100%',
+    }
 })

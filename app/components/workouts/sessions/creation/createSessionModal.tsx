@@ -3,8 +3,8 @@ import { RealizedExercise } from '@/app/db/model/RealizedExercise';
 import { getAllRoutines, Routine } from '@/app/db/model/Routine';
 import { createSession, Session } from '@/app/db/model/Session';
 import { useEffect, useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Modal, StyleSheet, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import DateSelector from './dateSelector';
 import ExerciseSelector from './exerciseSelector';
@@ -81,7 +81,7 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
     async function saveSession() {
         
         const newSession: Session = {
-          date: sessionDate.getDate().toString(),
+          date: `${sessionDate.getDate().toString()}/${sessionDate.getMonth().toString() + 1}/${sessionDate.getFullYear().toString()}`,
           realizedExercises: realizedExercises,
           tag: {
             name: "null"
@@ -121,16 +121,12 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
                             <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />    
 
                             <View style={styles.buttonsContainer}>
-                                <Pressable
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={closeModal}>
-                                    <Text variant='titleSmall'>Close</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={saveSession}>
-                                    <Text variant='titleSmall'>Save</Text>
-                                </Pressable>
+                                <Button mode="outlined" onPress={closeModal}> 
+                                      Close
+                                </Button>
+                                <Button mode="outlined" onPress={saveSession}>
+                                      Save
+                                </Button>
                             </View>
 
                         </View>
@@ -173,7 +169,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#f32821ff',
   },
   modalText: {
     marginBottom: 15,

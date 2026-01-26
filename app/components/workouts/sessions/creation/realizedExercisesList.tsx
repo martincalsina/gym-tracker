@@ -1,7 +1,7 @@
 import { RealizedExercise } from '@/app/db/model/RealizedExercise';
-import { WorkingSet } from '@/app/db/model/WorkingSet';
-import { StyleSheet } from 'react-native';
-import { Button, List, Text } from 'react-native-paper';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Button, DataTable, List, Text } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import WorkingSetDataInput from './workingSetDataInput';
 
 type Props = {
@@ -90,28 +90,55 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
     return (
         <>
             <Text>Realized Exercises</Text>
+            <SafeAreaView>
+              <FlatList
+                style={styles.realizedExercisesList}
+                data={realizedExercises}
+                renderItem={({item}) => {
+                    const realizedExercise = item;
+                    return (
+                          <List.Accordion
+                                    key={realizedExercise.exerciseNumber}
+                                    title={`${realizedExercise.exerciseNumber} - ${realizedExercise.exercise.name}`}
+                                    >
 
-            <List.Section>
-                {
-                    realizedExercises.map((ex: RealizedExercise) => (
+                                    
+                                    <DataTable>
 
-                        <List.Accordion
-                            key={ex.exerciseNumber}
-                            title={`${ex.exerciseNumber} - ${ex.exercise.name}`}
-                            left={() => <List.Icon icon="folder" />}>
-                            {ex.workingSets.map((set: WorkingSet) => (
-                                
-                                <WorkingSetDataInput key={set.setNumber} set={set} ex={ex} updateSetReps={updateSetReps} updateSetWeight={updateSetWeight}/>
+                                      <DataTable.Header>
 
-                            ))}
+                                        <DataTable.Title>Set</DataTable.Title>
+                                        <DataTable.Title>Reps</DataTable.Title>
+                                        <DataTable.Title>Weight</DataTable.Title>
 
-                            <Button icon="plus" mode="contained" onPress={() => addWorkingSet(ex.exerciseNumber)}>
-                                add set
-                            </Button>
-                        </List.Accordion>
-                    ))
-                }
-            </List.Section>
+                                      </DataTable.Header>
+                            
+
+                                      <FlatList
+                                        data={realizedExercise.workingSets} 
+                                        renderItem={({item}) => {
+                                          const set = item;
+                                          return (
+                                              <WorkingSetDataInput key={set.setNumber} set={set} ex={realizedExercise} updateSetReps={updateSetReps} updateSetWeight={updateSetWeight}/>
+                                          )
+                                        }}
+                                      />
+
+                                    </DataTable>
+                                    <View style={styles.buttonContainer}>
+                                      <Button style={styles.button} icon="plus" mode="outlined" labelStyle={styles.text} onPress={() => addWorkingSet(realizedExercise.exerciseNumber)}>
+                                          add set
+                                      </Button>
+                                    </View>
+
+                          </List.Accordion>
+                          )
+                      }
+                    }
+              />
+            </SafeAreaView>
+               
+    
         </>
     )
 
@@ -120,46 +147,16 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
 
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalView: {
-    width: '90%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
+    realizedExercisesList: {
+      maxHeight: 230
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  input: {
-    width: '100%',
-    marginBottom: 12,
-  },
-  textArea: {
-    minHeight: 100,
-  },
+    buttonContainer: {
+        alignItems: 'flex-start',      
+        paddingVertical: 5
+    },
+    button: {
+    },
+    text: {
+        fontSize: 12
+    }
 });
