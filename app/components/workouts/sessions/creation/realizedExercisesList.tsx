@@ -1,6 +1,6 @@
 import { RealizedExercise } from '@/app/db/model/RealizedExercise';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Button, DataTable, List, Text } from 'react-native-paper';
+import { Button, DataTable, IconButton, List, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import WorkingSetDataInput from './workingSetDataInput';
 
@@ -24,7 +24,7 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
                             reps: 0,
                             setNumber: ex.workingSets.length + 1,
                             restAfter: 0,
-                        rir: 0
+                            rir: 0
                         },
                     ],
                 }
@@ -86,6 +86,25 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
     }));
   }
 
+  function removeRealizedExercise(exerciseNumber: number) {
+
+    console.log(`Removing the exercise number ${exerciseNumber}`)
+
+    setRealizedExercises((prev) => 
+      prev.filter((rex) => rex.exerciseNumber != exerciseNumber).map((rex) => {
+        if (rex.exerciseNumber > exerciseNumber) {
+          return {
+            ...rex,
+            exerciseNumber: rex.exerciseNumber-1
+          }
+        } else {
+          return rex;
+        }
+      })
+    )
+
+  }
+
 
     return (
         <>
@@ -97,41 +116,47 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
                 renderItem={({item}) => {
                     const realizedExercise = item;
                     return (
-                          <List.Accordion
-                                    key={realizedExercise.exerciseNumber}
-                                    title={`${realizedExercise.exerciseNumber} - ${realizedExercise.exercise.name}`}
-                                    >
+                          <View style={styles.realizedExerciseContainer}>
 
-                                    
-                                    <DataTable>
+                              <IconButton onPress={() => removeRealizedExercise(realizedExercise.exerciseNumber)}style={styles.deleteButton} icon="trash-can-outline"/>
 
-                                      <DataTable.Header>
+                              <List.Accordion
+                                  contentStyle={styles.dropdownTitle}
+                                  key={realizedExercise.exerciseNumber}
+                                  title={`${realizedExercise.exerciseNumber} - ${realizedExercise.exercise.name}`}
+                              >
 
-                                        <DataTable.Title>Set</DataTable.Title>
-                                        <DataTable.Title>Reps</DataTable.Title>
-                                        <DataTable.Title>Weight</DataTable.Title>
+                                        
+                                        <DataTable>
 
-                                      </DataTable.Header>
-                            
+                                          <DataTable.Header>
 
-                                      <FlatList
-                                        data={realizedExercise.workingSets} 
-                                        renderItem={({item}) => {
-                                          const set = item;
-                                          return (
-                                              <WorkingSetDataInput key={set.setNumber} set={set} ex={realizedExercise} updateSetReps={updateSetReps} updateSetWeight={updateSetWeight}/>
-                                          )
-                                        }}
-                                      />
+                                            <DataTable.Title>Set</DataTable.Title>
+                                            <DataTable.Title>Reps</DataTable.Title>
+                                            <DataTable.Title>Weight</DataTable.Title>
 
-                                    </DataTable>
-                                    <View style={styles.buttonContainer}>
-                                      <Button style={styles.button} icon="plus" mode="outlined" labelStyle={styles.text} onPress={() => addWorkingSet(realizedExercise.exerciseNumber)}>
-                                          add set
-                                      </Button>
-                                    </View>
+                                          </DataTable.Header>
+                                
 
-                          </List.Accordion>
+                                          <FlatList
+                                            data={realizedExercise.workingSets} 
+                                            renderItem={({item}) => {
+                                              const set = item;
+                                              return (
+                                                  <WorkingSetDataInput key={set.setNumber} set={set} ex={realizedExercise} updateSetReps={updateSetReps} updateSetWeight={updateSetWeight}/>
+                                              )
+                                            }}
+                                          />
+
+                                        </DataTable>
+                                        <View style={styles.buttonContainer}>
+                                          <Button icon="plus" mode="outlined" labelStyle={styles.text} onPress={() => addWorkingSet(realizedExercise.exerciseNumber)}>
+                                              add set
+                                          </Button>
+                                        </View>
+
+                              </List.Accordion>
+                          </View>
                           )
                       }
                     }
@@ -154,7 +179,18 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',      
         paddingVertical: 5
     },
-    button: {
+    realizedExerciseContainer: {
+      position: 'relative',
+      flex: 1
+    },
+    deleteButton: {
+      position: 'absolute',
+      top: 6,
+      left: -6,
+      zIndex: 10,
+    },
+    dropdownTitle: {
+      left: 20,
     },
     text: {
         fontSize: 12
