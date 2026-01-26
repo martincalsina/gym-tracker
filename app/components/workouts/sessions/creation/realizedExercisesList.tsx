@@ -118,7 +118,7 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
                     return (
                           <View style={styles.realizedExerciseContainer}>
 
-                              <IconButton onPress={() => removeRealizedExercise(realizedExercise.exerciseNumber)}style={styles.deleteButton} icon="trash-can-outline"/>
+                              <IconButton onPress={() => removeRealizedExercise(realizedExercise.exerciseNumber)} style={styles.deleteButton} icon="trash-can-outline"/>
 
                               <List.Accordion
                                   contentStyle={styles.dropdownTitle}
@@ -131,9 +131,9 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
 
                                           <DataTable.Header>
 
-                                            <DataTable.Title>Set</DataTable.Title>
-                                            <DataTable.Title>Reps</DataTable.Title>
-                                            <DataTable.Title>Weight</DataTable.Title>
+                                            <DataTable.Title numeric>Set</DataTable.Title>
+                                            <DataTable.Title numeric>Reps</DataTable.Title>
+                                            <DataTable.Title numeric>Weight</DataTable.Title>
 
                                           </DataTable.Header>
                                 
@@ -143,7 +143,10 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
                                             renderItem={({item}) => {
                                               const set = item;
                                               return (
-                                                  <WorkingSetDataInput key={set.setNumber} set={set} ex={realizedExercise} updateSetReps={updateSetReps} updateSetWeight={updateSetWeight}/>
+                                                  <WorkingSetDataInput key={set.setNumber} set={set} 
+                                                    ex={realizedExercise} updateSetReps={updateSetReps} 
+                                                    updateSetWeight={updateSetWeight}
+                                                    setRealizedExercises={setRealizedExercises}/>
                                               )
                                             }}
                                           />
