@@ -18,6 +18,7 @@ export default function SessionsList({sessionsData, loadSessions}: Props  ) {
 
       <FlatList
         data={sessionsData}
+        style={styles.container}
         renderItem={({item}) => (
           <>
               <View style={styles.buttonsContainer}>
@@ -46,6 +47,9 @@ export default function SessionsList({sessionsData, loadSessions}: Props  ) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+        flex: 1,
+  },
   buttonsContainer: {
     position: 'absolute',
     zIndex: 10,

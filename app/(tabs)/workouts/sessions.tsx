@@ -29,17 +29,14 @@ export default function Sessions() {
 
     return (
         <>
-            <View style={styles.container} >
+            <View >
                 <AddSessionButton onAdd={addSession}/>
-                <SessionsList loadSessions={loadSessions} sessionsData={sessions}/>
             </View>
+            <SessionsList loadSessions={loadSessions} sessionsData={sessions}/>
+            
         </>
     )
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-    },
 })
