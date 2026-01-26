@@ -22,7 +22,7 @@ export default function Exercises() {
 
         loadExercises();
 
-    });
+    }, []);
 
     return (
         <>

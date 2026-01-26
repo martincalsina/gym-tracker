@@ -1,13 +1,18 @@
+import { Routine } from '@/app/db/model/Routine';
 import { StyleSheet } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 
-export default function RoutineCard({ routine }: any) {
+type Props = {
+    routine: Routine
+}
+
+export default function RoutineCard({ routine }: Props) {
 
     return (
         <Card key={routine.id} style={styles.card}>
             <Card.Content>
                 <Text variant="titleLarge">{routine.name}</Text>
-                <Text variant="bodyMedium">{routine.note}</Text>
+                <Text variant="bodyMedium">{routine.description}</Text>
             </Card.Content>
             <Card.Cover style={styles.cardImage} source={{ uri: routine.cover }} />
             <Card.Actions style={styles.optionsContainer}>
