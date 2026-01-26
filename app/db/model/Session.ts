@@ -65,3 +65,12 @@ export async function getAllSessions() {
     return sessions;
 }
 
+export async function deleteSessionById(id: number) {
+
+    const db = await getDb();
+
+    const result = await db.runAsync(`DELETE FROM workoutSession AS w WHERE w.id = ?;`, [id]);
+
+    return result.changes;
+
+}

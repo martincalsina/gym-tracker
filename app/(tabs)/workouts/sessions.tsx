@@ -16,27 +16,30 @@ export default function Sessions() {
 
     }
 
-    useEffect(() => {
+    async function loadSessions() {
+        const data: Session[] = await getAllSessions();
+        setSessions(data);
+    }
 
-        async function loadSessions() {
-            const data: Session[] = await getAllSessions();
-            setSessions(data);
-        }
+    useEffect(() => {
 
         loadSessions();
 
     }, [])
 
     return (
-        <View style={styles.container} >
-            <AddSessionButton onAdd={addSession}/>
-            <SessionsList sessionsData={sessions}/>
-        </View>
+        <>
+            <View style={styles.container} >
+                <AddSessionButton onAdd={addSession}/>
+                <SessionsList loadSessions={loadSessions} sessionsData={sessions}/>
+            </View>
+        </>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'flex-start',
     },
 })

@@ -1,37 +1,59 @@
 import { Session } from '@/app/db/model/Session';
 import { useState } from 'react';
-import { FlatList } from 'react-native';
-import { List } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { IconButton, List } from 'react-native-paper';
+import DeleteSessionButton from './deletion/deleteSessionButton';
 import SessionDescription from './sessionDescription';
 
 type Props = {
   sessionsData: Session[];
+  loadSessions: () => void;
 }
 
-export default function SessionsList({sessionsData}: Props  ) {
+export default function SessionsList({sessionsData, loadSessions}: Props  ) {
+
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  return (
-    <SafeAreaView>
+  return ( 
+
       <FlatList
         data={sessionsData}
         renderItem={({item}) => (
-          <List.Accordion
-              title={`${item.date} - RUTINA`}
-              description={item.tag?.name}
-              expanded={expandedId === item.id?.toString()}
-              onPress={() =>
-                setExpandedId(
-                  expandedId === item.id!.toString() ? null : item.id!.toString()
-                )
-              }
-          >
-            <SessionDescription session={item}/> 
-          </List.Accordion>  
+          <>
+              <View style={styles.buttonsContainer}>
+                  <IconButton onPress={() => {}} size={20} icon='pencil-outline'/>
+                  <DeleteSessionButton loadSessions={loadSessions} session={item}/>
+                  
+              </View>
+              <List.Accordion
+                  title={`${item.date} - RUTINA`}
+                  contentStyle={styles.sessionTitle}
+                  description={item.tag?.name}
+                  expanded={expandedId === item.id?.toString()}
+                  onPress={() =>
+                    setExpandedId(
+                      expandedId === item.id!.toString() ? null : item.id!.toString()
+                    )
+                  }
+              >
+                <SessionDescription session={item}/> 
+              </List.Accordion>  
+          </>
         )}
         keyExtractor={(item)=> item.id!.toString()}
       />
-    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  buttonsContainer: {
+    position: 'absolute',
+    zIndex: 10,
+    flexDirection: 'row',
+    top: 8,
+    justifyContent: 'flex-start',
+  },
+  sessionTitle: {
+    left: 85
+  }
+})
