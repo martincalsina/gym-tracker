@@ -1,15 +1,13 @@
 import AddSessionButton from "@/app/components/workouts/sessions/addSessionButton";
 import SessionsList from "@/app/components/workouts/sessions/sessionsList";
 import { getAllSessions, Session } from '@/app/db/model/Session';
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { SessionsContext } from "./sessionsContext";
 
 
 
 export default function Sessions() {
-
-    const updateSessions = useContext(SessionsContext); 
 
     const [sessions, setSessions] = useState<Session[]>([]);
 

@@ -1,5 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
+// if true, drops all DB tables and resets migrations
 const __DEV__ = false;
 
 type Migration = {
@@ -113,6 +114,25 @@ const migrations: Migration[] = [
             `);
         }
     },
+    {
+        version: 9,
+        description: "changes date column type in workoutSession from TEXT to INTEGER",
+        up: async (db) => {
+            await db.execAsync(`
+                ALTER TABLE workoutSession DROP COLUMN date;
+                ALTER TABLE workoutSession ADD COLUMN date NUMERIC NOT NULL;    
+            `)
+        }
+    },
+    {
+        version: 10,
+        description: "adds routine_id fk to workoutSession table",
+        up: async (db) => {
+            await db.execAsync(`
+                ALTER TABLE workoutSession ADD COLUMN routine_id INTEGER NOT NULL REFERENCES routine(id);    
+            `)
+        }
+    }   
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase) {

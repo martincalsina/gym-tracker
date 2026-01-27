@@ -1,8 +1,9 @@
 import { Session } from '@/app/db/model/Session';
 import { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { IconButton, List } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import DeleteSessionButton from './deletion/deleteSessionButton';
+import EditSessionButton from './edition/editSessionButton';
 import SessionDescription from './sessionDescription';
 
 type Props = {
@@ -21,9 +22,8 @@ export default function SessionsList({sessionsData}: Props  ) {
         renderItem={({item}) => (
           <>
               <View style={styles.buttonsContainer}>
-                  <IconButton onPress={() => {}} size={20} icon='pencil-outline'/>
-                  <DeleteSessionButton session={item}/>
-                  
+                  <EditSessionButton session={item}/>
+                  <DeleteSessionButton session={item}/>    
               </View>
               <List.Accordion
                   title={`${item.date} - RUTINA`}
