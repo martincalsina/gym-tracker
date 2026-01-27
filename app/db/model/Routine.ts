@@ -4,13 +4,19 @@ import { getDb } from '../global';
 // React usage type
 
 export type Routine = {
-    id?: number;
+    id: number;
     name: string;
     description: string;
     cover: string;
 };
 
-export async function createRoutine(routine: Routine) {
+export type CreateRoutineData = {
+    name: string;
+    description: string;
+    cover: string;
+}
+
+export async function createRoutine(routine: CreateRoutineData) {
 
     let db = await getDb();
     const result = await db.runAsync(`

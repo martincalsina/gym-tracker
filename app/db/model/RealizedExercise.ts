@@ -1,6 +1,6 @@
 import { getDb } from '../global';
 import { Exercise, getExerciseById } from './Exercise';
-import { WorkingSet, createWorkingSet, getWorkingSetsByRealizedExerciseId } from './WorkingSet';
+import { WorkingSet, createWorkingSet, deleteWorkingSetsByRealizedExerciseId, getWorkingSetsByRealizedExerciseId } from './WorkingSet';
 
 // React usage type
 
@@ -36,6 +36,22 @@ export async function createRealizedExercise(realizedExercise: RealizedExercise,
     await Promise.all(realizedExercise.workingSets.map(async (wset) => createWorkingSet(wset, realizedExerciseId)));
 
     return realizedExerciseId;
+
+}
+
+export async function deleteRealizedExercisesBySessionId(sessionId: number) {
+
+    const db = await getDb();
+
+    const toRemoveRealizedExercisesIds: number[] = await db.getAllAsync(`
+        SELECT r.id FROM realizedExercise AS r WHERE r.session_id = ?;
+    `, [sessionId]); 
+
+    await Promise.all(toRemoveRealizedExercisesIds.map((id: number) => deleteWorkingSetsByRealizedExerciseId(id)));
+
+    const result = await db.runAsync(`
+        DELETE FROM realizedExercise AS r WHERE r.session_id = ?;    
+    `, [sessionId]);
 
 }
 

@@ -89,10 +89,10 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
 
         const sessionId: number = await createSession(newSession);
 
-        onAdd({
-          ...newSession,
-          id: sessionId,
-        });
+        //onAdd({
+        //  ...newSession,
+        //  id: sessionId,
+        //});
 
         closeModal();
     }

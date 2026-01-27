@@ -36,6 +36,18 @@ export async function createWorkingSet(workingSet: WorkingSet, realizedExerciseI
     return workingSetId;
 }
 
+export async function deleteWorkingSetsByRealizedExerciseId(realizedExerciseId: number) {
+
+    const db = await getDb();
+
+    const result = await db.runAsync(`
+        DELETE FROM workingSet AS w WHERE w.realizedExercise_id = ?;
+    `, [realizedExerciseId]);
+
+    return result.changes;
+
+}
+
 export async function getWorkingSetsByRealizedExerciseId(id: number) {
 
     const db = await getDb();

@@ -1,4 +1,4 @@
-import { createRoutine, getRoutineById, Routine } from '@/app/db/model/Routine';
+import { createRoutine, CreateRoutineData } from '@/app/db/model/Routine';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
@@ -25,7 +25,7 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
     }
 
     async function saveRoutine() {
-        let routine: Routine = {
+        let routine: CreateRoutineData = {
           name: routineName,
           description: routineDescription,
           cover: DEFAULT_COVER,

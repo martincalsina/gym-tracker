@@ -1,5 +1,5 @@
 import { getDb } from '../global';
-import { createRealizedExercise, getRealizedExercisesBySessionId, RealizedExercise } from './RealizedExercise';
+import { createRealizedExercise, deleteRealizedExercisesBySessionId, getRealizedExercisesBySessionId, RealizedExercise } from './RealizedExercise';
 import { getRoutineById, Routine } from './Routine';
 import { getTagById, Tag } from './Tag';
 
@@ -21,6 +21,14 @@ export type CreateSessionData = {
     routine_id: number;
 }
 
+export type EditSessionData = {
+    id: number;
+    date: Date;
+    tag: Tag | null;
+    realizedExercises: RealizedExercise[];
+    routine_id: number;
+}
+
 // DB access type
 
 export type SessionRow = {
@@ -36,13 +44,28 @@ export async function createSession(session: CreateSessionData) {
 
     const result = await db.runAsync(`
         INSERT INTO workoutSession (date, tag_id, routine_id) VALUES (?, ?, ?);
-    `, [session.date.toString(), session.tag?.id ?? null, session.routine_id]);
+    `, [session.date.toISOString(), session.tag?.id ?? null, session.routine_id]);
 
     const sessionId: number = result.lastInsertRowId;
 
     await Promise.all(session.realizedExercises.map(async (rex) => createRealizedExercise(rex, sessionId)));
 
     return sessionId;
+}
+
+export async function editSession(session: EditSessionData) {
+
+    const db = await getDb();
+
+    await db.runAsync(`
+        UPDATE workoutSession SET date=?, tag_id=?, routine_id=? WHERE id=?;
+    `, [session.date.toISOString(), session.tag?.id ?? null, session.routine_id, session.id]);
+
+    // we drop all original realized exercises and insert/reinsert the current ones
+    await deleteRealizedExercisesBySessionId(session.id);
+    await Promise.all(session.realizedExercises.map(async (rex) => createRealizedExercise(rex, session.id)));
+
+    return;
 }
 
 export async function getAllSessions() {
