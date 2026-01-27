@@ -1,7 +1,7 @@
 import { Exercise, getAllExercises } from '@/app/db/model/Exercise';
 import { RealizedExercise } from '@/app/db/model/RealizedExercise';
 import { getAllRoutines, Routine } from '@/app/db/model/Routine';
-import { createSession, Session } from '@/app/db/model/Session';
+import { createSession, CreateSessionData } from '@/app/db/model/Session';
 import { useEffect, useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
@@ -80,12 +80,11 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
 
     async function saveSession() {
         
-        const newSession: Session = {
-          date: `${sessionDate.getDate().toString()}/${sessionDate.getMonth().toString() + 1}/${sessionDate.getFullYear().toString()}`,
+        const newSession: CreateSessionData = {
+          date: sessionDate,
           realizedExercises: realizedExercises,
-          tag: {
-            name: "null"
-          }
+          tag: null,
+          routine_id: selectedRoutine,
         };
 
         const sessionId: number = await createSession(newSession);

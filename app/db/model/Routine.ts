@@ -21,11 +21,16 @@ export async function createRoutine(routine: Routine) {
 
 }
 
-export async function getRoutine(id: number) {
+export async function getRoutineById(id: number) {
     let db = await getDb();
     const routine: Routine | null = await db.getFirstAsync<Routine>(`
-            SELECT * FROM routine AS r WHERE r.id = ${id}; 
-        `);
+            SELECT * FROM routine AS r WHERE r.id = ?; 
+        `, [id]);
+
+    if (routine == null) {
+        throw new Error(`No routine was found with the id ${id}`);
+    }
+
     return routine;
 }
 

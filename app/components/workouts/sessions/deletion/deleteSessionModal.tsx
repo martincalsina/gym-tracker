@@ -20,7 +20,7 @@ export default function DeleteSessionModal({session, deleteSessionModalVisible, 
 
     async function deleteSession() {
 
-        const sessionsRemoved = await deleteSessionById(session.id!);
+        const sessionsRemoved = await deleteSessionById(session.id);
 
         console.log(`${sessionsRemoved} workout sessions have been removed`)
         
@@ -39,7 +39,7 @@ export default function DeleteSessionModal({session, deleteSessionModalVisible, 
             }}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text variant='titleMedium'>You are about to delete the session {session.date}. Do you want to proceed?</Text>
+                    <Text variant='titleMedium'>You are about to delete the session {session.id}. Do you want to proceed?</Text>
                     <View style={styles.buttonsContainer}>
                         <Button mode='outlined' onPress={closeDeleteSessionModal}>
                             Cancel

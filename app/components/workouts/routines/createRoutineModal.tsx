@@ -1,4 +1,4 @@
-import { createRoutine, getRoutine, Routine } from '@/app/db/model/Routine';
+import { createRoutine, getRoutineById, Routine } from '@/app/db/model/Routine';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
@@ -33,7 +33,7 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
         let newRoutineId: number = await createRoutine(routine);
         console.log(`New routine has id: ${newRoutineId}`);
         closeModal();
-        let newRoutine: Routine | null = await getRoutine(newRoutineId);
+        let newRoutine: Routine | null = await getRoutineById(newRoutineId);
         onAdd(newRoutine);
     }
 

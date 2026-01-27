@@ -14,6 +14,10 @@ export default function SessionsList({sessionsData}: Props  ) {
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
+  function dateToString(date: Date) {
+    return `${date.getDay()}/${date.getMonth()+1}/${date.getFullYear()}`;
+  } 
+
   return ( 
 
       <FlatList
@@ -26,7 +30,7 @@ export default function SessionsList({sessionsData}: Props  ) {
                   <DeleteSessionButton session={item}/>    
               </View>
               <List.Accordion
-                  title={`${item.date} - RUTINA`}
+                  title={`${dateToString(item.date)} - RUTINA`}
                   contentStyle={styles.sessionTitle}
                   description={item.tag?.name}
                   expanded={expandedId === item.id?.toString()}

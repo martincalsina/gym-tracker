@@ -1,16 +1,25 @@
 import { getDb } from '../global';
 import { createRealizedExercise, getRealizedExercisesBySessionId, RealizedExercise } from './RealizedExercise';
+import { getRoutineById, Routine } from './Routine';
 import { getTagById, Tag } from './Tag';
 
 
 // React usage type
 
 export type Session = {
-    id?: number;
-    date: string;
+    id: number;
+    date: Date;
     tag: Tag | null;
     realizedExercises: RealizedExercise[];
+    routine: Routine;
 };
+
+export type CreateSessionData = {
+    date: Date;
+    tag: Tag | null;
+    realizedExercises: RealizedExercise[];
+    routine_id: number;
+}
 
 // DB access type
 
@@ -18,15 +27,16 @@ export type SessionRow = {
     id: number;
     date: string;
     tag_id: number | null;
+    routine_id: number;
 };
 
-export async function createSession(session: Session) {
+export async function createSession(session: CreateSessionData) {
 
     let db = await getDb();
 
     const result = await db.runAsync(`
-        INSERT INTO workoutSession (date, tag_id) VALUES (?, ?);
-    `, [session.date, session.tag?.id ?? null]);
+        INSERT INTO workoutSession (date, tag_id, routine_id) VALUES (?, ?, ?);
+    `, [session.date.toString(), session.tag?.id ?? null, session.routine_id]);
 
     const sessionId: number = result.lastInsertRowId;
 
@@ -40,22 +50,24 @@ export async function getAllSessions() {
     const db = await getDb();
 
     const sessionRows: SessionRow[] = await db.getAllAsync<SessionRow>(`
-        SELECT w.id, w.date, w.tag_id FROM workoutSession AS w;
+        SELECT w.id, w.date, w.tag_id, w.routine_id FROM workoutSession AS w;
     `);
 
     const sessions: Session[] = await Promise.all(sessionRows.map(async (sessionRow: SessionRow) => {
-        const [realizedExercises, tag] = await Promise.all(
+        const [realizedExercises, tag, routine] = await Promise.all(
             [
                 getRealizedExercisesBySessionId(sessionRow.id),
-                sessionRow.tag_id ? getTagById(sessionRow.tag_id) : null
+                sessionRow.tag_id ? getTagById(sessionRow.tag_id) : null,
+                getRoutineById(sessionRow.routine_id),
             ]
         );
 
         const session: Session = {
             id: sessionRow.id,
-            date: sessionRow.date,
+            date: new Date(sessionRow.date),
             tag: tag,
-            realizedExercises: realizedExercises
+            realizedExercises: realizedExercises,
+            routine: routine,
         };
 
         return session;
