@@ -16,6 +16,13 @@ export type CreateRoutineData = {
     cover: string;
 }
 
+export type EditRoutineData = {
+    id: number;
+    name: string;
+    description: string;
+    cover: string;
+}
+
 export async function createRoutine(routine: CreateRoutineData) {
 
     let db = await getDb();
@@ -24,6 +31,16 @@ export async function createRoutine(routine: CreateRoutineData) {
         `, [routine.name, routine.description, routine.cover]);
 
     return result.lastInsertRowId;
+
+}
+
+export async function editRoutine(routine: EditRoutineData) {
+    
+    const db = await getDb();
+
+    await db.runAsync(`
+        UPDATE routine SET name = ?, description = ?, cover = ? WHERE id = ?;
+    `, [routine.name, routine.description, routine.cover, routine.id]);
 
 }
 
