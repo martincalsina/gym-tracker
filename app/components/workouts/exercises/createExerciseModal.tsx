@@ -1,7 +1,8 @@
 import { createExercise, Exercise, getExerciseById } from '@/app/db/model/Exercise';
+import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
@@ -17,6 +18,32 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
 
     const [exerciseName, setExerciseName] = useState("");
     const [exerciseDescription, setExerciseDescription] = useState("");
+    const [cover, setCover] = useState(DEFAULT_COVER);
+
+    async function pickCover() {
+
+      const permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
+
+      if (!permissionResult.granted) {
+        Alert.alert('Permission required', 'Permission to access the media library is required.');
+        return;
+      }
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsEditing: true,
+        aspect: [4, 5],
+        quality: 1,
+      });
+
+      console.log(result);
+
+      if (!result.canceled) {
+        setCover(result.assets[0].uri);
+      } 
+
+
+    }
 
     function closeModal() {
         setExerciseName("");
@@ -28,7 +55,7 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
         let exercise: Exercise = {
           name: exerciseName,
           description: exerciseDescription,
-          cover: DEFAULT_COVER,
+          cover: cover,
         };
         let newExerciseId: number = await createExercise(exercise);
         console.log(`New exercise has id: ${newExerciseId}`);
@@ -66,6 +93,9 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
                                 value={exerciseDescription}
                                 onChangeText={text => setExerciseDescription(text)}
                             />
+                            <Button icon="camera" mode='outlined' onPress={pickCover}>
+                              Add Cover
+                            </Button>
                             <View style={styles.buttonsContainer}>
                                 <Pressable
                                     style={[styles.button, styles.buttonClose]}
