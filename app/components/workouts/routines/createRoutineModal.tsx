@@ -1,7 +1,8 @@
-import { createRoutine, CreateRoutineData } from '@/app/db/model/Routine';
+import { createRoutine, CreateRoutineData, getRoutineById, Routine } from '@/app/db/model/Routine';
+import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
@@ -17,6 +18,31 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
 
     const [routineName, setRoutineName] = useState("");
     const [routineDescription, setRoutineDescription] = useState("");
+    const [cover, setCover] = useState<string>(DEFAULT_COVER);
+
+    async function pickCover() {
+      
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+      if (!permissionResult.granted) {
+        Alert.alert("Permission Required", "Permission to access the media library is required")
+        return;
+      }
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1
+      })
+
+      console.log(result);
+
+      if (!result.canceled) {
+        setCover(result.assets[0].uri);
+      }
+
+    }
 
     function closeModal() {
         setRoutineName("");
@@ -28,7 +54,7 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
         let routine: CreateRoutineData = {
           name: routineName,
           description: routineDescription,
-          cover: DEFAULT_COVER,
+          cover: cover,
         };
         let newRoutineId: number = await createRoutine(routine);
         console.log(`New routine has id: ${newRoutineId}`);
@@ -66,6 +92,9 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
                                 value={routineDescription}
                                 onChangeText={text => setRoutineDescription(text)}
                             />
+                            <Button icon="camera" mode="contained" onPress={pickCover}>
+                                    Add Cover
+                            </Button>
                             <View style={styles.buttonsContainer}>
                                 <Pressable
                                     style={[styles.button, styles.buttonClose]}
