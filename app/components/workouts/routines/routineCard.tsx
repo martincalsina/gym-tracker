@@ -1,6 +1,7 @@
 import { Routine } from '@/app/db/model/Routine';
 import { StyleSheet } from 'react-native';
-import { Button, Card, Text } from 'react-native-paper';
+import { Card, Text } from 'react-native-paper';
+import DeleteRoutineButton from './deletion/deleteRoutineButton';
 import EditRoutineButton from './edition/editRoutineButton';
 
 type Props = {
@@ -18,7 +19,7 @@ export default function RoutineCard({ routine }: Props) {
             <Card.Cover style={styles.cardImage} source={{ uri: routine.cover }} />
             <Card.Actions style={styles.optionsContainer}>
                 <EditRoutineButton routine={routine}/>
-                <Button>Go</Button>
+                <DeleteRoutineButton routine={routine}/>
             </Card.Actions>
         </Card>
     )
