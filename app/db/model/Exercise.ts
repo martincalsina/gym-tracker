@@ -1,13 +1,19 @@
 import { getDb } from '../global';
 
 export type Exercise = {
-    id?: number;
+    id: number;
     name: string;
     description: string;
     cover: string;
 };
 
-export async function createExercise(exercise: Exercise) {
+export type CreateExerciseData = {
+    name: string;
+    description: string;
+    cover: string;
+}
+
+export async function createExercise(exercise: CreateExerciseData) {
 
     let db = await getDb();
     const result = await db.runAsync(`
@@ -29,9 +35,13 @@ export async function getExerciseById(id: number) {
 
     const db = await getDb();
 
-    const exercise: Exercise = await db.getFirstSync<Exercise>(`
+    const exercise: Exercise | null = await db.getFirstSync<Exercise>(`
         SELECT * FROM exercise AS e WHERE e.id = ?;
-    `, id) ?? { name: "null", description: "null", cover: "null" };
+    `, id);
+
+    if (exercise == null) {
+        throw new Error(`There is no exercise with the id: ${id}`);
+    }
 
     return exercise;
 }
