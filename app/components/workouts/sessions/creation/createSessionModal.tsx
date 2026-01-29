@@ -87,7 +87,7 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
           routine_id: selectedRoutine,
         };
 
-        const sessionId: number = await createSession(newSession);
+        await createSession(newSession);
 
         //onAdd({
         //  ...newSession,

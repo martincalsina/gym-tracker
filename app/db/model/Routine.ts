@@ -1,5 +1,4 @@
 import { getDb } from '../global';
-import { deleteSessionById } from './Session';
 
 
 // React usage type
@@ -49,17 +48,11 @@ export async function deleteRoutineById(id: number) {
 
     const db = await getDb();
 
-    await db.runAsync(`
+    const result = await db.runAsync(`
         DELETE FROM routine WHERE id = ?;
     `, [id]);
 
-    const sessionsToDeleteIds: number[] = await db.getAllAsync(`
-        SELECT id FROM workoutSession WHERE routine_id = ?;
-    `, [id]);
-
-    await Promise.all(sessionsToDeleteIds.map((id: number) => deleteSessionById(id)));
-
-    return sessionsToDeleteIds.length;
+    return result.changes;
 
 }
 

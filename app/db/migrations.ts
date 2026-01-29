@@ -122,20 +122,96 @@ const migrations: Migration[] = [
                 ALTER TABLE workoutSession ADD COLUMN routine_id INTEGER NOT NULL REFERENCES routine(id);    
             `)
         }
-    }   
+    },
+    {
+        version: 10,
+        description: "enables WAL journal mode",
+        up: async (db) => {
+            await db.execAsync(`PRAGMA journal_mode = WAL;`)
+        }
+    },
+    {
+        version: 11,
+        description: "adds ON DELETE CASCADE to routine_id in workoutSession table",
+        up: async (db) => {
+            await db.execAsync(`
+                PRAGMA foreign_keys = 0;
+                ALTER TABLE workoutSession RENAME TO workoutSession_old;
+                CREATE TABLE workoutSession (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    date TEXT NOT NULL,
+                    tag_id INTEGER REFERENCES tag(id),
+                    routine_id INTEGER NOT NULL REFERENCES routine(id) ON DELETE CASCADE
+                );
+                INSERT INTO workoutSession (id, date, tag_id, routine_id)
+                SELECT id, date, tag_id, routine_id FROM workoutSession_old;
+                DROP TABLE workoutSession_old;
+                PRAGMA foreign_keys = 1;
+            `)
+        }
+    },
+    {
+        version: 12,
+        description: "adds ON DELETE CASCADE to workoutSession_id in realizedExercise table",
+        up: async (db) => {
+            await db.execAsync(`
+                PRAGMA foreign_keys = 0;
+                ALTER TABLE realizedExercise RENAME TO realizedExercise_old;
+                CREATE TABLE realizedExercise (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    exerciseNumber INTEGER NOT NULL,
+                    notes TEXT,
+                    session_id INTEGER NOT NULL REFERENCES workoutSession(id) ON DELETE CASCADE,
+                    exercise_id INTEGER NOT NULL REFERENCES exercise(id)
+                );
+                INSERT INTO realizedExercise (id, exerciseNumber, notes, session_id, exercise_id)
+                SELECT id, exerciseNumber, notes, session_id, exercise_id FROM realizedExercise_old;
+                DROP TABLE realizedExercise_old;
+                PRAGMA foreign_keys = 1;
+            `);
+        }
+    },
+    {
+        version: 13,
+        description: "adds ON DELETE CASCADE to realizedExercise_id in workingSet table",
+        up: async (db) => {
+            await db.execAsync(`
+                PRAGMA foreign_keys = 0;
+                ALTER TABLE workingSet RENAME TO workingSet_old;
+                CREATE TABLE workingSet (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    weight NUMERIC NOT NULL,
+                    reps INTEGER NOT NULL,
+                    setNumber INTEGER NOT NULL,
+                    restAfter NUMERIC DEFAULT 0 NOT NULL,
+                    rir INTEGER,
+                    realizedExercise_id INTEGER NOT NULL REFERENCES realizedExercise(id) ON DELETE CASCADE
+                );
+                INSERT INTO workingSet (id, weight, reps, setNumber, restAfter, rir, realizedExercise_id)
+                SELECT id, weight, reps, setNumber, restAfter, rir, realizedExercise_id FROM workingSet_old;
+                DROP TABLE workingSet_old;
+                PRAGMA foreign_keys = 1;
+            `);
+        }
+    }
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase) {
 
     if (__DEV__) {
-        await db.execAsync(`DROP TABLE workingSet`)
-        await db.execAsync(`DROP TABLE realizedExercise`);
-        await db.execAsync(`DROP TABLE exercise`)
-        await db.execAsync(`DROP TABLE routine`);
-        await db.execAsync(`DROP TABLE workoutSession`)
-        await db.execAsync(`DROP TABLE tag`);
+        await db.execAsync(`DROP TABLE IF EXISTS workingSet`);
+        await db.execAsync(`DROP TABLE IF EXISTS workingSet_old`);
+        await db.execAsync(`DROP TABLE IF EXISTS realizedExercise`);
+        await db.execAsync(`DROP TABLE IF EXISTS realizedExercise_old`);
+        await db.execAsync(`DROP TABLE IF EXISTS exercise`)
+        await db.execAsync(`DROP TABLE IF EXISTS routine`);
+        await db.execAsync(`DROP TABLE IF EXISTS workoutSession`)
+        await db.execAsync(`DROP TABLE IF EXISTS workoutSession_old`)
+        await db.execAsync(`DROP TABLE IF EXISTS tag`);
         await db.execAsync(`PRAGMA user_version = 0`);
-    }
+    }    
+
+    //await db.execAsync(`DELETE FROM workoutSession WHERE routine_id = 0`);
 
     console.log("Running migrations");
 
@@ -146,10 +222,10 @@ export async function runMigrations(db: SQLite.SQLiteDatabase) {
     for (const migration of migrations) {
 
         if (migration.version > current_version) {
+            console.log(`Running migration ${migration.version}: ${migration.description}`);
             await migration.up(db);
             await db.execAsync(`PRAGMA user_version = ${migration.version};`);
             current_version = migration.version;
-            console.log(`Running migration ${migration.version}: ${migration.description}`);
         }
 
     }

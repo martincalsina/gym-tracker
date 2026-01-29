@@ -14,8 +14,15 @@ export async function getDb() {
         
         if (__DEBUG__) {
 
-            await db.execAsync(`DELETE FROM workoutSession WHERE 1 = 1;`);
-            
+            //await db.execAsync(`
+            //    PRAGMA foreign_keys = ON;
+            //    DELETE FROM routine WHERE id = 7;`);
+            //await db.execAsync(`DELETE FROM workoutSession WHERE id = 7;`);
+
+            console.log("ROUTINES:")
+            console.log(
+                await db.getAllAsync(`SELECT * FROM routine;`)
+            );
             console.log("WORKOUT SESSIONS:")
             console.log(
                 await db.getAllAsync(`SELECT * FROM workoutSession;`)
@@ -28,14 +35,20 @@ export async function getDb() {
             console.log(
                 await db.getAllAsync(`SELECT * FROM workingSet;`)
             );
-            console.log("EXERCISES:")
-            console.log(
-                await db.getAllAsync(`SELECT * FROM exercise;`)
-            );
+            //console.log("EXERCISES:")
+            //console.log(
+            //    await db.getAllAsync(`SELECT * FROM exercise;`)
+            //);
 
         }
 
     }
+
+    // Looks like foreign_keys are not activated explicitly on EACH connection the ON DELETE CASCADE won't 
+    // delete child rows if the parent one is removed (even if a migration was done ensuring that)
+    // SQLite docs states 'Foreign key constraints are disabled by default (for backwards compatibility), so must be enabled separately for each database connection.'
+    // https://sqlite.org/foreignkeys.html#fk_enable
+    await db.execAsync(`PRAGMA foreign_keys = 1`);
 
     return db;
 
