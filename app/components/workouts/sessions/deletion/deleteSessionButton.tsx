@@ -7,7 +7,7 @@ type Props = {
     session: Session;
 }
 
-export default function deleteSessionSection({session}: Props) {
+export default function DeleteSessionButton({session}: Props) {
 
     const [deleteSessionModalVisible, setDeleteSessionModalVisible] = useState<boolean>(false);
     

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import CreateSessionModal from "./createSessionModal";
 
-export default function addSessionButton({onAdd}: any) {
+export default function addSessionButton() {
 
     const [modalVisible, setModalVisible] = useState(false);
 

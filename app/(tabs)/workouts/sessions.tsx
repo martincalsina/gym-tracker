@@ -11,12 +11,6 @@ export default function Sessions() {
 
     const [sessions, setSessions] = useState<Session[]>([]);
 
-    function addSession(newSession: Session) {
-        
-        setSessions([...sessions, newSession]);
-
-    }
-
     async function loadSessions() {
         const data: Session[] = await getAllSessions();
         setSessions(data);
@@ -32,7 +26,7 @@ export default function Sessions() {
         <>
             <SessionsContext value={loadSessions}>
                 <View>
-                    <AddSessionButton onAdd={addSession}/>
+                    <AddSessionButton/>
                 </View>
                 <SessionsList sessionsData={sessions}/>
             </SessionsContext>

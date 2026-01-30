@@ -8,8 +8,6 @@ type Props = {
     setModalVisible: ((arg: boolean) => void);
 }
 
-const DEFAULT_COVER: string = "https://picsum.photos/700";
-
 export default function EditExerciseModal({exercise, modalVisible, setModalVisible}: Props) {
 
   async function onSave(name: string, description: string, cover: string) {
