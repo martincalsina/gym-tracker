@@ -1,4 +1,6 @@
+import { RoutinesContext } from "@/app/(tabs)/workouts/routinesContext";
 import { deleteRoutineById, Routine } from "@/app/db/model/Routine";
+import { useContext } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 
@@ -8,9 +10,9 @@ type Props = {
     setModalVisible: (arg: boolean) => void;
 }
 
-export default function DeleteSessionModal({routine, modalVisible, setModalVisible}: Props) {
+export default function DeleteRoutineModal({routine, modalVisible, setModalVisible}: Props) {
     
-
+    const loadRoutines = useContext(RoutinesContext);
 
     function closeModal() {
         setModalVisible(false);
@@ -18,10 +20,9 @@ export default function DeleteSessionModal({routine, modalVisible, setModalVisib
 
     async function deleteRoutine() {
 
-        const deletedSessions = await deleteRoutineById(routine.id);
-
-        console.log(`${deletedSessions} workout sessions have been removed`)
-
+        await deleteRoutineById(routine.id);
+        await loadRoutines();
+        //TODO reload sessions
         closeModal();
     }
 

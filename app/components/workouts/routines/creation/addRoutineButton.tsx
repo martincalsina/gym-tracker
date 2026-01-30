@@ -9,7 +9,7 @@ export default function addRoutineButton({onAdd}: any) {
 
     return (
         <>
-            <CreateRoutineModal onAdd={onAdd} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            <CreateRoutineModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <View style={styles.buttonContainer}>
                 <Pressable
                     style={[styles.button, styles.buttonOpen]}
