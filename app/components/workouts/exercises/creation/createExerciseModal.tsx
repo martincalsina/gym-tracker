@@ -9,7 +9,7 @@ type Props = {
 
 const DEFAULT_COVER: string = "https://picsum.photos/700";
 
-export default function CreateRoutineModal({modalVisible, setModalVisible}: Props) {
+export default function CreateExerciseModal({modalVisible, setModalVisible}: Props) {
 
   async function onSave(name: string, description: string, cover: string) {
 

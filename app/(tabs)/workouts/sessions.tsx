@@ -1,4 +1,4 @@
-import AddSessionButton from "@/app/components/workouts/sessions/addSessionButton";
+import AddSessionButton from "@/app/components/workouts/sessions/creation/addSessionButton";
 import SessionsList from "@/app/components/workouts/sessions/sessionsList";
 import { getAllSessions, Session } from '@/app/db/model/Session';
 import { useEffect, useState } from "react";

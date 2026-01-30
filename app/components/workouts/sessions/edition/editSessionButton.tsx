@@ -10,7 +10,7 @@ type Props = {
 export default function EditSessionButton({session}: Props) {
     
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    
+
     return (
         <>
             <EditSessionModal session={session} modalVisible={modalVisible} setModalVisible={setModalVisible}/>
