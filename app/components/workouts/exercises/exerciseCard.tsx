@@ -2,6 +2,7 @@ import { Exercise } from '@/app/db/model/Exercise';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text } from "react-native-paper";
 import DeleteExerciseButton from './deletion/deleteExerciseButton';
+import EditExerciseButton from './edition/editExerciseButton';
 
 type Props = {
     exercise: Exercise;
@@ -15,6 +16,7 @@ export default function ExerciseCard({exercise}: Props) {
             </Card.Content>
             <Card.Cover style={styles.cardImage} source={{ uri: exercise.cover }} />
             <View style={styles.buttonsContainer}>
+                <EditExerciseButton exercise={exercise}/>
                 {!exercise.isDefault && <DeleteExerciseButton exercise={exercise}/>}
             </View>
         </Card>
