@@ -27,11 +27,15 @@ export async function createWorkingSet(workingSet: WorkingSet, realizedExerciseI
 
     let db = await getDb();
 
+    console.log("creating workingSet");
+
     const result = await db.runAsync(`
         INSERT INTO workingSet (weight, reps, setNumber, restAfter, rir, realizedExercise_id) VALUES (?, ?, ?, ?, ?, ?);
     `, [workingSet.weight, workingSet.reps, workingSet.setNumber, workingSet.restAfter, workingSet.rir, realizedExerciseId]);
 
     let workingSetId = result.lastInsertRowId;
+
+    console.log("working set created")
 
     return workingSetId;
 }

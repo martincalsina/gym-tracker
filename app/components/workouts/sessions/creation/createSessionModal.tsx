@@ -93,7 +93,6 @@ export default function CreateSessionModal({modalVisible, setModalVisible, onAdd
         //  ...newSession,
         //  id: sessionId,
         //});
-
         closeModal();
     }
 

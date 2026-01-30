@@ -39,6 +39,7 @@ export default function ExerciseSelector({exercises, selectedExercise, setSelect
                                 name: "placeholder",
                                 description: "",
                                 cover: "",
+                                isDefault: false
                             });
                             setAddExerciseModalVisible(false);
                         }

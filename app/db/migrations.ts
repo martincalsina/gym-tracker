@@ -202,7 +202,45 @@ const migrations: Migration[] = [
                 ALTER TABLE exercise ADD COLUMN isDefault INTEGER DEFAULT (0);    
             `);
         }
-    }
+    },
+    {
+        /* the recreation of the workingSet is necessary, otherwise that table's realizedExercise_id will 
+           still be pointing to the renamed realizedExercise_old's id instead of the new realizedExercise's id column
+        */
+        version: 15,
+        description: "adds ON DELETE CASCADE to exercise_id in realizedExercise table",
+        up: async (db) => {
+            await db.execAsync(`
+                PRAGMA foreign_keys = 0;
+                
+                ALTER TABLE realizedExercise RENAME TO realizedExercise_old;
+                CREATE TABLE realizedExercise (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    exerciseNumber INTEGER NOT NULL,
+                    notes TEXT,
+                    session_id INTEGER NOT NULL REFERENCES workoutSession(id) ON DELETE CASCADE,
+                    exercise_id INTEGER NOT NULL REFERENCES exercise(id) ON DELETE CASCADE
+                );
+                INSERT INTO realizedExercise (id, exerciseNumber, notes, session_id, exercise_id)
+                SELECT id, exerciseNumber, notes, session_id, exercise_id FROM realizedExercise_old;
+                DROP TABLE realizedExercise_old;
+
+                ALTER TABLE workingSet RENAME TO workingSet_old;
+                CREATE TABLE workingSet (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    weight NUMERIC NOT NULL,
+                    reps INTEGER NOT NULL,
+                    setNumber INTEGER NOT NULL,
+                    restAfter NUMERIC DEFAULT 0 NOT NULL,
+                    rir INTEGER,
+                    realizedExercise_id INTEGER NOT NULL
+                    REFERENCES realizedExercise(id) ON DELETE CASCADE
+                );
+
+                PRAGMA foreign_keys = 1;
+            `);
+        }
+    },
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase) {

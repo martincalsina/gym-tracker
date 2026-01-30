@@ -26,10 +26,11 @@ export async function createRealizedExercise(realizedExercise: RealizedExercise,
 
     let db = await getDb();
 
+    console.log("creating realized exercise")
+
     const result = await db.runAsync(`
         INSERT INTO realizedExercise (exerciseNumber, notes, session_id, exercise_id) VALUES (?, ?, ?, ?);
-    `, [realizedExercise.exerciseNumber, realizedExercise.notes, sessionId, realizedExercise.exercise.id ?? null]);
-
+    `, [realizedExercise.exerciseNumber, realizedExercise.notes, sessionId, realizedExercise.exercise.id ]);
 
     const realizedExerciseId = result.lastInsertRowId;
 

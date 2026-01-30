@@ -5,6 +5,7 @@ export type Exercise = {
     name: string;
     description: string;
     cover: string;
+    isDefault: boolean;
 };
 
 export type CreateExerciseData = {
@@ -24,10 +25,22 @@ export async function createExercise(exercise: CreateExerciseData) {
 
 }
 
+export async function deleteExerciseById(id: number) {
+
+    const db = await getDb();
+    
+    const result = await db.runAsync(`
+        DELETE FROM exercise WHERE id = ?;
+    `, [id]);
+
+    return result.changes;
+
+}
+
 export async function getAllExercises() {
     let db = await getDb();
     const exercises: Exercise[] = await db.getAllAsync<Exercise>(`
-        SELECT * FROM exercise;    
+        SELECT id, name, description, cover, isDefault FROM exercise;    
     `);
     return exercises;
 }

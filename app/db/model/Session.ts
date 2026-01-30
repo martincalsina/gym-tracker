@@ -42,6 +42,8 @@ export async function createSession(session: CreateSessionData) {
 
     let db = await getDb();
 
+    console.log("creating session")
+
     const result = await db.runAsync(`
         INSERT INTO workoutSession (date, tag_id, routine_id) VALUES (?, ?, ?);
     `, [session.date.toISOString(), session.tag?.id ?? null, session.routine_id]);
@@ -49,6 +51,8 @@ export async function createSession(session: CreateSessionData) {
     const sessionId: number = result.lastInsertRowId;
 
     await Promise.all(session.realizedExercises.map(async (rex) => createRealizedExercise(rex, sessionId)));
+
+    console.log("session created")
 
     return sessionId;
 }

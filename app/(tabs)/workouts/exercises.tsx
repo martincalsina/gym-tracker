@@ -1,4 +1,4 @@
-import AddExerciseButton from "@/app/components/workouts/exercises/addExerciseButton";
+import AddExerciseButton from "@/app/components/workouts/exercises/creation/addExerciseButton";
 import ExerciseCard from "@/app/components/workouts/exercises/exerciseCard";
 import { Exercise, getAllExercises } from '@/app/db/model/Exercise';
 import { useEffect, useState } from "react";
