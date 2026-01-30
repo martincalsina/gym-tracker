@@ -23,6 +23,7 @@ export default function DeleteExerciseModal({exercise, modalVisible, setModalVis
 
         await deleteExerciseById(exercise.id);
         await loadExercises();
+        // TODO reload sessions
         closeModal();
     }
 
