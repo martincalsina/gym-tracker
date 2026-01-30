@@ -13,12 +13,13 @@ export type CreateExerciseData = {
     cover: string;
 }
 
+// this function is only for user created exercises, then it is asummed that isDefault column will have a 0 value
 export async function createExercise(exercise: CreateExerciseData) {
 
     let db = await getDb();
     const result = await db.runAsync(`
-        INSERT INTO exercise (name, description, cover) VALUES (?, ?, ?);
-    `, [exercise.name, exercise.description, exercise.cover]);
+        INSERT INTO exercise (name, description, cover, isDefault) VALUES (?, ?, ?, ?);
+    `, [exercise.name, exercise.description, exercise.cover, 0]);
     return result.lastInsertRowId;
 
 }

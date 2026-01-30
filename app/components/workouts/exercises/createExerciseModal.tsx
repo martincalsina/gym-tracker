@@ -1,4 +1,4 @@
-import { createExercise, Exercise, getExerciseById } from '@/app/db/model/Exercise';
+import { createExercise, CreateExerciseData, Exercise, getExerciseById } from '@/app/db/model/Exercise';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
@@ -52,7 +52,7 @@ export default function CreateRoutineModal({modalVisible, setModalVisible, onAdd
     }
 
     async function saveRoutine() {
-        let exercise: Exercise = {
+        let exercise: CreateExerciseData = {
           name: exerciseName,
           description: exerciseDescription,
           cover: cover,

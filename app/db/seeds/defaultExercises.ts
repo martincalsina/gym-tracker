@@ -8,12 +8,12 @@ export const DEFAULT_EXERCISES: CreateExerciseData[] = [
     {
         name: "Barbell Bench Press",
         description: "Chest",
-        cover: DEFAULT_COVER
+        cover: DEFAULT_COVER,
     },
     {
         name: "Chin Ups",
         description: "Back",
-        cover: DEFAULT_COVER
+        cover: DEFAULT_COVER,
     },
     {
         name: "Conventional Deadlift",
@@ -66,8 +66,8 @@ export async function seedDefaultExercises(db: SQLite.SQLiteDatabase) {
 
   await Promise.all(DEFAULT_EXERCISES.map(ex => {
         db.runAsync(
-            `INSERT INTO exercise (name, description, cover) VALUES (?, ?, ?)`,
-            [ex.name, ex.description, ex.cover]
+            `INSERT INTO exercise (name, description, cover, isDefault) VALUES (?, ?, ?, ?)`,
+            [ex.name, ex.description, ex.cover, 1]
         );
     })
   )

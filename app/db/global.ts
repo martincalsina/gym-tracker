@@ -24,7 +24,7 @@ export async function getDb() {
             //await db.execAsync(`
             //    PRAGMA foreign_keys = ON;
             //    DELETE FROM routine WHERE id = 7;`);
-            //await db.execAsync(`DELETE FROM workoutSession WHERE id = 7;`);
+            // await db.execAsync(`DELETE FROM exercise`);
 
             console.log("ROUTINES:")
             console.log(

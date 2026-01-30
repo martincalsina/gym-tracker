@@ -193,6 +193,15 @@ const migrations: Migration[] = [
                 PRAGMA foreign_keys = 1;
             `);
         }
+    },
+    {
+        version: 14,
+        description: "adds isDefault column to exercise table",
+        up: async (db) => {
+            await db.execAsync(`
+                ALTER TABLE exercise ADD COLUMN isDefault INTEGER DEFAULT (0);    
+            `);
+        }
     }
 ];
 
