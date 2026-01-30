@@ -205,7 +205,10 @@ const migrations: Migration[] = [
     },
     {
         /* the recreation of the workingSet is necessary, otherwise that table's realizedExercise_id will 
-           still be pointing to the renamed realizedExercise_old's id instead of the new realizedExercise's id column
+           still be pointing to the renamed realizedExercise_old's id instead of the new realizedExercise's id column.
+           'If an "ALTER TABLE ... RENAME TO" command is used to rename a table that is the parent table of one or more foreign key constraints, 
+           the definitions of the foreign key constraints are modified to refer to the parent table by its new name.'
+           https://sqlite.org/foreignkeys.html#fk_schemacommands
         */
         version: 15,
         description: "adds ON DELETE CASCADE to exercise_id in realizedExercise table",
