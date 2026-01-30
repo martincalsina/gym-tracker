@@ -1,4 +1,6 @@
+import { ExercisesContext } from "@/app/(tabs)/workouts/exercisesContext";
 import { deleteExerciseById, Exercise } from "@/app/db/model/Exercise";
+import { useContext } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button, Text } from 'react-native-paper';
 
@@ -11,16 +13,16 @@ type Props = {
 
 export default function DeleteExerciseModal({exercise, modalVisible, setModalVisible}: Props) {
 
+    const loadExercises = useContext(ExercisesContext);
+
     function closeModal() {
         setModalVisible(false);
     }
 
     async function deleteExercise() {
 
-        const deletedSessions = await deleteExerciseById(exercise.id);
-
-        console.log(`${deletedSessions} workout sessions have been removed`)
-
+        await deleteExerciseById(exercise.id);
+        await loadExercises();
         closeModal();
     }
 

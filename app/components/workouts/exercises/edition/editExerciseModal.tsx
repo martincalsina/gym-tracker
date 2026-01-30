@@ -1,9 +1,5 @@
 import { editExercise, EditExerciseData, Exercise } from "@/app/db/model/Exercise";
-import * as ImagePicker from 'expo-image-picker';
-import { useState } from "react";
-import { Alert, Modal, Pressable, StyleSheet, View } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
+import ExerciseFormModal from "../shared/ExerciseFormModal";
 
 
 type Props = {
@@ -14,144 +10,31 @@ type Props = {
 
 const DEFAULT_COVER: string = "https://picsum.photos/700";
 
-export default function EditRoutineModal({exercise, modalVisible, setModalVisible}: Props) {
+export default function EditExerciseModal({exercise, modalVisible, setModalVisible}: Props) {
 
+  async function onSave(name: string, description: string, cover: string) {
 
-    const [exerciseName, setExerciseName] = useState(exercise.name);
-    const [exerciseDescription, setExerciseDescription] = useState(exercise.description);
-    const [cover, setCover] = useState<string>(exercise.cover);
-
-    async function pickCover() {
-      
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
-      if (!permissionResult.granted) {
-        Alert.alert("Permission Required", "Permission to access the media library is required")
-        return;
-      }
-
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['images'],
-        allowsEditing: true,
-        aspect: [4, 5],
-        quality: 1
-      })
-
-      console.log(result);
-
-      if (!result.canceled) {
-        setCover(result.assets[0].uri);
-      }
-
+    const editedExercise: EditExerciseData = {
+      id: exercise.id,
+      name: name,
+      description: description,
+      cover: cover
     }
 
-    function closeModal() {
-        setModalVisible(false);
-    }
+    await editExercise(editedExercise);
 
-    async function saveExercise() {
-        let editedExercise: EditExerciseData = {
-          id: exercise.id,
-          name: exerciseName,
-          description: exerciseDescription,
-          cover: cover,
-        };
-        await editExercise(editedExercise);
-        closeModal();
-    }
+  }
+  
+  return (
+    <ExerciseFormModal 
+      title={"Edit Exercise"}
+      defaultName={exercise.name}
+      defaultDescription={exercise.description}
+      defaultCover={exercise.cover}
+      onSave={onSave}
+      modalVisible={modalVisible}
+      setModalVisible={setModalVisible}
+    />
+  )
 
-    return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-                setModalVisible(!modalVisible);
-            }}>
-            <SafeAreaView style={{ flex: 1 }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text variant='titleMedium'>Edit exercise</Text>
-                        <TextInput
-                            style={styles.input}
-                            mode='outlined'
-                            label="Name"
-                            value={exerciseName}
-                            onChangeText={text => setExerciseName(text)}
-                        />
-                        <TextInput
-                            style={[styles.input, styles.textArea]}
-                            multiline={true}
-                            numberOfLines={6}
-                            mode='outlined'
-                            label="Description"
-                            value={exerciseDescription}
-                            onChangeText={text => setExerciseDescription(text)}
-                        />
-                        <Button icon="camera" mode="contained" onPress={pickCover}>
-                            Add Cover
-                        </Button>
-                        <View style={styles.buttonsContainer}>
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={closeModal}>
-                                <Text variant='titleSmall'>Close</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={saveExercise}>
-                                <Text variant='titleSmall'>Save</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </View>
-            </SafeAreaView>
-        </Modal>
-    )
 }
-
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalView: {
-    width: '90%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  input: {
-    width: '100%',
-    marginBottom: 12,
-  },
-  textArea: {
-    minHeight: 100,
-  },
-});
