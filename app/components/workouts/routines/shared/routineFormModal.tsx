@@ -53,6 +53,17 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
         setModalVisible(false);
     }
 
+    function restoreValues() {
+        setRoutineName(defaultName || "");
+        setRoutineDescription(defaultDescription || "");
+        setCover(defaultCover || DEFAULT_COVER);
+    }
+
+    function discardChanges() {
+        restoreValues();
+        closeModal();
+    }
+
     async function saveRoutine() {
         await onSave(routineName, routineDescription, cover);
         await loadRoutines();
@@ -93,7 +104,7 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
                         <View style={styles.buttonsContainer}>
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={closeModal}>
+                                onPress={discardChanges}>
                                 <Text variant='titleSmall'>Close</Text>
                             </Pressable>
                             <Pressable

@@ -55,6 +55,17 @@ export default function EditExerciseModal({title, defaultName, defaultDescriptio
         setModalVisible(false);
     }
 
+    function restoreValues() {
+        setExerciseName(defaultName || "");
+        setExerciseDescription(defaultDescription || "");
+        setCover(defaultCover || DEFAULT_COVER);
+    }
+
+    function discardChanges() {
+        restoreValues();
+        closeModal();
+    }
+
     async function saveExercise() {
         await onSave(exerciseName, exerciseDescription, cover);
         await loadExercises()
@@ -95,7 +106,7 @@ export default function EditExerciseModal({title, defaultName, defaultDescriptio
                         <View style={styles.buttonsContainer}>
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
-                                onPress={closeModal}>
+                                onPress={discardChanges}>
                                 <Text variant='titleSmall'>Close</Text>
                             </Pressable>
                             <Pressable
