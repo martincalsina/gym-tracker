@@ -49,6 +49,36 @@ export const DEFAULT_EXERCISES: CreateExerciseData[] = [
         name: "Layed Hamstring Curl",
         description: "Hamstrings",
         cover: DEFAULT_COVER
+    },
+    {
+        name: "Dips",
+        description: "Chest",
+        cover: DEFAULT_COVER
+    },
+    {
+        name: "Cable Rear Delt Fly",
+        description: "Rear Delts",
+        cover: DEFAULT_COVER
+    },
+    {
+        name: "Cable Lateral Raises",
+        description: "Lateral Delts",
+        cover: DEFAULT_COVER
+    },
+    {
+        name: "Stiff Legs Deadlift",
+        description: "Glutes & Hamstrings",
+        cover: DEFAULT_COVER
+    },
+    {
+        name: "Incline Bench Press",
+        description: "Chest",
+        cover: DEFAULT_COVER
+    },
+    {
+        name: "Overhead Cable Triceps Extensions",
+        description: "Triceps",
+        cover: DEFAULT_COVER
     }
 ]
 

@@ -261,8 +261,6 @@ export async function runMigrations(db: SQLite.SQLiteDatabase) {
         await db.execAsync(`PRAGMA user_version = 0`);
     }    
 
-    //await db.execAsync(`DELETE FROM workoutSession WHERE routine_id = 0`);
-
     console.log("Running migrations");
 
     const [{user_version}] = await db.getAllAsync<{user_version: number}>(`PRAGMA user_version;`);
