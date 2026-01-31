@@ -56,15 +56,22 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     }
     
     function closeModal() {
-            setSessionDate(new Date(Date.now()));
-            //setSessionDateShow(false);
-            //setSelectedRoutine();
-            setRealizedExercises([]);
             setModalVisible(false);
+    }
+
+    function restoreValues() {
+          setSessionDate(defaultDate || new Date());
+          setSelectedRoutine(defaultRoutine || 0); 
+          setRealizedExercises(defaultRealizedExercises || []);
+          setSelectedExercise(0);
+    }
+
+    function discardChanges() {
+        restoreValues();
+        closeModal()
     }
     
     async function saveSession() {
-            
         await onSave(sessionDate, realizedExercises, selectedRoutine);
         await loadSessions();   
         closeModal();
@@ -109,7 +116,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                         <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
 
                         <View style={styles.buttonsContainer}>
-                            <Button mode="outlined" onPress={closeModal}>
+                            <Button mode="outlined" onPress={discardChanges}>
                                 Close
                             </Button>
                             <Button mode="outlined" onPress={saveSession}>
