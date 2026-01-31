@@ -36,7 +36,7 @@ export default function ExerciseSelector({exercises, selectedExercise, setSelect
                             setSelectedExercise(itemValue);
                             addRealizedExercise({
                                 id: itemValue, //this is the only thing that really matters when adding the exercise
-                                name: "placeholder",
+                                name: exercises.filter((ex) => ex.id == itemValue)[0].name,
                                 description: "",
                                 cover: "",
                                 isDefault: false

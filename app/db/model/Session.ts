@@ -52,8 +52,6 @@ export async function createSession(session: CreateSessionData) {
 
     await Promise.all(session.realizedExercises.map(async (rex) => createRealizedExercise(rex, sessionId)));
 
-    console.log("session created")
-
     return sessionId;
 }
 

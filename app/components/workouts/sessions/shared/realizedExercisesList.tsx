@@ -114,7 +114,7 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
                 style={styles.realizedExercisesList}
                 data={realizedExercises}
                 renderItem={({item}) => {
-                    const realizedExercise = item;
+                    const realizedExercise: RealizedExercise = item;
                     return (
                           <View style={styles.realizedExerciseContainer}>
 

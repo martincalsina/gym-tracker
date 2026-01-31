@@ -6,10 +6,10 @@ import { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DateSelector from "../creation/dateSelector";
-import ExerciseSelector from "../creation/exerciseSelector";
-import RealizedExercisesList from "../creation/realizedExercisesList";
-import RoutineSelector from "../creation/routineSelector";
+import DateSelector from "./dateSelector";
+import ExerciseSelector from "./exerciseSelector";
+import RealizedExercisesList from "./realizedExercisesList";
+import RoutineSelector from "./routineSelector";
 
 type Props = {
     title: string;
