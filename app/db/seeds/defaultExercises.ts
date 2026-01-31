@@ -1,8 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import { CreateExerciseData } from "../model/Exercise";
 
-const DEFAULT_COVER: string = "https://picsum.photos/700";
-
+const DEFAULT_COVER: string = "@/assets/images/noun-squat.png";
 
 export const DEFAULT_EXERCISES: CreateExerciseData[] = [
     {

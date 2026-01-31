@@ -15,7 +15,7 @@ type Props = {
     setModalVisible: ((arg: boolean) => void);
 }
 
-const DEFAULT_COVER: string = "https://picsum.photos/700";
+const DEFAULT_COVER: string = "@/assets/images/noun-squat.png";
 
 export default function RoutineFormModal({title, defaultName, defaultDescription, defaultCover, onSave, modalVisible, setModalVisible}: Props) {
 

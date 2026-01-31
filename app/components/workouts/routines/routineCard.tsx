@@ -8,7 +8,13 @@ type Props = {
     routine: Routine
 }
 
+const DEFAULT_COVER: string = "@/assets/images/noun-squat.png";
+
 export default function RoutineCard({ routine }: Props) {
+
+    const coverSource = routine.cover != DEFAULT_COVER ? { uri: routine.cover }
+                        : require(DEFAULT_COVER);
+
 
     return (
         <Card key={routine.id} style={styles.card}>
@@ -16,7 +22,7 @@ export default function RoutineCard({ routine }: Props) {
                 <Text variant="titleLarge">{routine.name}</Text>
                 <Text variant="bodyMedium">{routine.description}</Text>
             </Card.Content>
-            <Card.Cover style={styles.cardImage} source={{ uri: routine.cover }} />
+            <Card.Cover style={styles.cardImage} source={coverSource} />
             <Card.Actions style={styles.optionsContainer}>
                 <EditRoutineButton routine={routine}/>
                 <DeleteRoutineButton routine={routine}/>

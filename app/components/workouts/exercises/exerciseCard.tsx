@@ -8,13 +8,19 @@ type Props = {
     exercise: Exercise;
 }
 
+const DEFAULT_COVER = "@/assets/images/noun-squat.png";
+
 export default function ExerciseCard({exercise}: Props) {
+    
+    const coverSource = exercise.cover != DEFAULT_COVER ? { uri: exercise.cover }
+                        : require(DEFAULT_COVER);
+    
     return (
         <Card key={exercise.id} style={styles.card}>
             <Card.Content>
                 <Text variant="titleSmall">{exercise.name}</Text>
             </Card.Content>
-            <Card.Cover style={styles.cardImage} source={{ uri: exercise.cover }} />
+            <Card.Cover style={styles.cardImage} source={coverSource} />
             <View style={styles.buttonsContainer}>
                 <EditExerciseButton exercise={exercise}/>
                 {!exercise.isDefault && <DeleteExerciseButton exercise={exercise}/>}
