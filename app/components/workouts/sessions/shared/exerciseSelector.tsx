@@ -34,13 +34,7 @@ export default function ExerciseSelector({exercises, selectedExercise, setSelect
                         selectedValue={selectedExercise}
                         onValueChange={(itemValue, itemIndex) => {
                             setSelectedExercise(itemValue);
-                            addRealizedExercise({
-                                id: itemValue, //this is the only thing that really matters when adding the exercise
-                                name: exercises.filter((ex) => ex.id == itemValue)[0].name,
-                                description: "",
-                                cover: "",
-                                isDefault: false
-                            });
+                            addRealizedExercise(exercises.filter((ex) => ex.id == itemValue)[0]);
                             setAddExerciseModalVisible(false);
                         }
                         }>

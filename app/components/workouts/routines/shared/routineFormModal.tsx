@@ -74,7 +74,7 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
         await loadRoutines();
 
         setIsSavingRoutine(false);
-        
+
         closeModal();
     }
 
@@ -114,7 +114,7 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
                               Close
                             </Button>
                             <Button onPress={saveRoutine} loading={isSavingRoutine}>
-                              Save
+                              {isSavingRoutine ? "    " : "Save"}
                             </Button>
                         </View>
                     </View>

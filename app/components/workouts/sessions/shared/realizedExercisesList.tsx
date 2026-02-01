@@ -1,15 +1,42 @@
+import { Exercise } from '@/app/db/model/Exercise';
 import { RealizedExercise } from '@/app/db/model/RealizedExercise';
+import { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Button, DataTable, IconButton, List, Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ExerciseSelector from './exerciseSelector';
 import WorkingSetDataInput from './workingSetDataInput';
 
 type Props = {
+    exercises: Exercise[];
     realizedExercises: RealizedExercise[];
     setRealizedExercises: (arg: ((arg: RealizedExercise[]) => RealizedExercise[])) => void;
 }
 
-export default function RealizedExercisesList({realizedExercises, setRealizedExercises}: Props) {
+export default function RealizedExercisesList({exercises, realizedExercises, setRealizedExercises}: Props) {
+
+    const [selectedExercise, setSelectedExercise] = useState<number>(0);
+
+    function addRealizedExercise(selectedExercise: Exercise) {
+          
+          const newRealizedExercise: RealizedExercise = {
+            exerciseNumber: realizedExercises.length+1,
+            exercise: selectedExercise,
+            notes: "Introduce something!",
+            workingSets: [
+              {
+                weight: 0,
+                reps: 0,
+                setNumber: 1,
+                restAfter: 0,
+                rir: 0,
+              }
+            ]
+          }
+    
+          setRealizedExercises(() => [...realizedExercises, newRealizedExercise]);
+    
+    }
 
     function addWorkingSet(exerciseNumber: number) {
         setRealizedExercises((prev) => prev.map((ex) => {
@@ -110,9 +137,11 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
         <>
             <Text>Realized Exercises</Text>
             <SafeAreaView>
+              
               <FlatList
                 style={styles.realizedExercisesList}
                 data={realizedExercises}
+                horizontal={false}
                 renderItem={({item}) => {
                     const realizedExercise: RealizedExercise = item;
                     return (
@@ -164,6 +193,7 @@ export default function RealizedExercisesList({realizedExercises, setRealizedExe
                       }
                     }
               />
+              <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
             </SafeAreaView>
                
     

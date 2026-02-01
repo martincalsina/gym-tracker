@@ -6,7 +6,6 @@ import { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import DateSelector from "./dateSelector";
-import ExerciseSelector from "./exerciseSelector";
 import RealizedExercisesList from "./realizedExercisesList";
 import RoutineSelector from "./routineSelector";
 
@@ -33,28 +32,6 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     const [sessionDate, setSessionDate] = useState<Date>(defaultDate || new Date());
     const [selectedRoutine, setSelectedRoutine] = useState<number>(defaultRoutine || 0); 
     const [realizedExercises, setRealizedExercises] = useState<RealizedExercise[]>(defaultRealizedExercises || []);
-    const [selectedExercise, setSelectedExercise] = useState<number>(0)
-
-    function addRealizedExercise(selectedExercise: Exercise) {
-          
-          const newRealizedExercise: RealizedExercise = {
-            exerciseNumber: realizedExercises.length+1,
-            exercise: selectedExercise,
-            notes: "Introduce something!",
-            workingSets: [
-              {
-                weight: 0,
-                reps: 0,
-                setNumber: 1,
-                restAfter: 0,
-                rir: 0,
-              }
-            ]
-          }
-    
-          setRealizedExercises([...realizedExercises, newRealizedExercise]);
-    
-    }
     
     function closeModal() {
           setModalVisible(false);
@@ -64,7 +41,6 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
           setSessionDate(defaultDate || new Date());
           setSelectedRoutine(defaultRoutine || 0); 
           setRealizedExercises(defaultRealizedExercises || []);
-          setSelectedExercise(0);
     }
 
     function discardChanges() {
@@ -116,9 +92,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
 
                           <RoutineSelector routines={routines} selectedRoutine={selectedRoutine} setSelectedRoutine={setSelectedRoutine} />
 
-                          <RealizedExercisesList realizedExercises={realizedExercises} setRealizedExercises={setRealizedExercises} />
-
-                          <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
+                          <RealizedExercisesList exercises={exercises} realizedExercises={realizedExercises} setRealizedExercises={setRealizedExercises} />
 
                           <View style={styles.buttonsContainer}>
                               <Button mode="outlined" onPress={discardChanges}>
