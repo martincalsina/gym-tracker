@@ -3,15 +3,23 @@ import RoutineCard from "@/app/components/workouts/routines/routineCard";
 import { getAllRoutines, Routine } from '@/app/db/model/Routine';
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { RoutinesContext } from "./routinesContext";
 
 export default function Routines() {
 
     const [routines, setRoutines] = useState<Routine[]>([]);
+    const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
 
     async function loadRoutines() {
+
+            setIsFetchingData(true);
+
             const data = await getAllRoutines();
             setRoutines(data);
+
+            setIsFetchingData(false);
+    
     }
 
     useEffect(() => {
@@ -26,6 +34,7 @@ export default function Routines() {
                 <View>
                     <AddRoutineButton/>
                 </View>
+                {isFetchingData && <ActivityIndicator size="large" animating={isFetchingData}/>}
                 <FlatList
                     style={styles.container}
                     data={routines}
