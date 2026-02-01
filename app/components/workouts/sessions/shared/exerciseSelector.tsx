@@ -66,7 +66,8 @@ export default function ExerciseSelector({exercises, selectedExercise, setSelect
 
 const styles = StyleSheet.create({
     modalContent: {
-        width: 300,
+        width: "100%",
+        paddingHorizontal: 20,
         paddingVertical: 20,
         marginHorizontal: 'auto',
     },

@@ -5,7 +5,6 @@ import { getAllRoutines, Routine } from "@/app/db/model/Routine";
 import { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 import DateSelector from "./dateSelector";
 import ExerciseSelector from "./exerciseSelector";
 import RealizedExercisesList from "./realizedExercisesList";
@@ -105,62 +104,43 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     return (
             <Modal
                 animationType="slide"
-                transparent={true}
+                transparent={false}
                 visible={modalVisible}
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}>
-                <SafeAreaView style={{flex: 1}}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text variant='titleMedium'>{title}</Text>
+                <View style={styles.modalContent}>
+                          <Text variant='titleLarge'>{title}</Text>
 
-                        <DateSelector sessionDate={sessionDate} setSessionDate={setSessionDate} />
+                          <DateSelector sessionDate={sessionDate} setSessionDate={setSessionDate} />
 
-                        <RoutineSelector routines={routines} selectedRoutine={selectedRoutine} setSelectedRoutine={setSelectedRoutine} />
+                          <RoutineSelector routines={routines} selectedRoutine={selectedRoutine} setSelectedRoutine={setSelectedRoutine} />
 
-                        <RealizedExercisesList realizedExercises={realizedExercises} setRealizedExercises={setRealizedExercises} />
+                          <RealizedExercisesList realizedExercises={realizedExercises} setRealizedExercises={setRealizedExercises} />
 
-                        <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
+                          <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
 
-                        <View style={styles.buttonsContainer}>
-                            <Button mode="outlined" onPress={discardChanges}>
-                                Close
-                            </Button>
-                            <Button mode="outlined" onPress={saveSession} loading={isSavingSession}>
-                                {isSavingSession ? "" : "Save"}
-                            </Button>
-                        </View>
-
-                    </View>
-                </View>
-                </SafeAreaView>
+                          <View style={styles.buttonsContainer}>
+                              <Button mode="outlined" onPress={discardChanges}>
+                                  Close
+                              </Button>
+                              <Button mode="outlined" onPress={saveSession} loading={isSavingSession}>
+                                  {isSavingSession ? "" : "Save"}
+                              </Button>
+                          </View>
+                  </View>
             </Modal>
     )
 }
 
 
 const styles = StyleSheet.create({
-  centeredView: {
+  modalContent: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: 'auto',
-    bottom: 'auto',
-  },
-  modalView: {
-    width: '90%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    width: "100%",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    marginHorizontal: "auto",
   },
   buttonsContainer: {
     flexDirection: 'row',
