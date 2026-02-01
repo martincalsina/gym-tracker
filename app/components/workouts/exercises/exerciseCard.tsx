@@ -1,4 +1,5 @@
 import { Exercise } from '@/app/db/model/Exercise';
+import { imageRegistry } from '@/assets/imageRegistry';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text } from "react-native-paper";
 import DeleteExerciseButton from './deletion/deleteExerciseButton';
@@ -8,12 +9,11 @@ type Props = {
     exercise: Exercise;
 }
 
-const DEFAULT_COVER = "@/assets/images/noun-squat.png";
 
 export default function ExerciseCard({exercise}: Props) {
-    
-    const coverSource = exercise.cover != DEFAULT_COVER ? { uri: exercise.cover }
-                        : require(DEFAULT_COVER);
+
+    const coverSource = (exercise.cover.startsWith("file://") || exercise.cover.startsWith("content://")) ? { uri: exercise.cover }
+                        : imageRegistry[exercise.cover];
     
     return (
         <Card key={exercise.id} style={styles.card}>

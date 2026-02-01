@@ -2,7 +2,7 @@ import { Exercise } from "@/app/db/model/Exercise";
 import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Text } from 'react-native-paper';
+import { IconButton, Text } from 'react-native-paper';
 
 type Props = {
     exercises: Exercise[];
@@ -49,9 +49,7 @@ export default function ExerciseSelector({exercises, selectedExercise, setSelect
             </Modal>
             
             <View style={styles.buttonContainer}>
-                <Button icon="plus" mode="outlined" onPress={() => setAddExerciseModalVisible(true)}>
-                                                add exercise
-                </Button>
+                <IconButton style={styles.button} icon="plus" mode="outlined" onPress={() => setAddExerciseModalVisible(true)}/>
             </View>
         </>
     )
@@ -67,6 +65,11 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         alignItems: 'flex-start',
-        paddingVertical: 5,
     },
+    button: {
+        height: 100,
+        width: 60,
+        margin: 0,
+        borderRadius: 0
+    }
 })

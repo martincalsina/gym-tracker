@@ -70,6 +70,10 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     
           setRoutines(routinesData);
           setExercises(exercisesData);
+
+          if (selectedRoutine == 0) {
+            setSelectedRoutine(routinesData[0].id)
+          }
     
           console.log("Loaded routines and exercises");
         }

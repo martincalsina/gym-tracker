@@ -1,11 +1,12 @@
 import { Exercise } from '@/app/db/model/Exercise';
 import { RealizedExercise } from '@/app/db/model/RealizedExercise';
+import { imageRegistry } from '@/assets/imageRegistry';
 import { useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { Button, DataTable, IconButton, List, Text } from 'react-native-paper';
+import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ExerciseSelector from './exerciseSelector';
-import WorkingSetDataInput from './workingSetDataInput';
+import RealizedExerciseDetail from './realizedExerciseDetail';
 
 type Props = {
     exercises: Exercise[];
@@ -16,6 +17,7 @@ type Props = {
 export default function RealizedExercisesList({exercises, realizedExercises, setRealizedExercises}: Props) {
 
     const [selectedExercise, setSelectedExercise] = useState<number>(0);
+    const [showedRealizedExercise, setShowedRealizedExercise] = useState<number | null>(null);
 
     function addRealizedExercise(selectedExercise: Exercise) {
           
@@ -38,163 +40,56 @@ export default function RealizedExercisesList({exercises, realizedExercises, set
     
     }
 
-    function addWorkingSet(exerciseNumber: number) {
-        setRealizedExercises((prev) => prev.map((ex) => {
-        
-            if (ex.exerciseNumber === exerciseNumber) {
-                return {
-                    ...ex,
-                    workingSets: [
-                        ...ex.workingSets,
-                        {
-                            weight: 0,
-                            reps: 0,
-                            setNumber: ex.workingSets.length + 1,
-                            restAfter: 0,
-                            rir: 0
-                        },
-                    ],
-                }
-            } else {
-                return ex;
-            }
-        }))
-    }
-
-  function updateSetReps(reps: number, setNumber: number, exerciseNumber: number) {
-    setRealizedExercises((prev) => prev.map((ex) => {
-      if (ex.exerciseNumber === exerciseNumber) {
-
-        return {
-          ...ex,
-          workingSets: (ex.workingSets.map((set) => {
-                  if (set.setNumber === setNumber) {
-                      return {
-                          ...set,
-                          reps: reps,
-                      };
-                  } else {
-                      return set;
-                  }
-                }))
-        } 
-
-
-      } else {
-        return ex;
-      }
-
-    }));
-  }
-
-  function updateSetWeight(weight: number, setNumber: number, exerciseNumber: number) {
-    setRealizedExercises((prev) => prev.map((ex) => {
-      if (ex.exerciseNumber === exerciseNumber) {
-
-        return {
-          ...ex,
-          workingSets: (ex.workingSets.map((set) => {
-                  if (set.setNumber === setNumber) {
-                      return {
-                          ...set,
-                          weight: weight,
-                      };
-                  } else {
-                      return set;
-                  }
-                }))
-        } 
-
-
-      } else {
-        return ex;
-      }
-
-    }));
-  }
-
-  function removeRealizedExercise(exerciseNumber: number) {
-
-    console.log(`Removing the exercise number ${exerciseNumber}`)
-
-    setRealizedExercises((prev) => 
-      prev.filter((rex) => rex.exerciseNumber != exerciseNumber).map((rex) => {
-        if (rex.exerciseNumber > exerciseNumber) {
-          return {
-            ...rex,
-            exerciseNumber: rex.exerciseNumber-1
-          }
-        } else {
-          return rex;
-        }
-      })
-    )
-
-  }
-
-
     return (
         <>
-            <Text>Realized Exercises</Text>
+            <Text variant='titleMedium'>Realized Exercises</Text>
             <SafeAreaView>
-              
-              <FlatList
-                style={styles.realizedExercisesList}
-                data={realizedExercises}
-                horizontal={false}
-                renderItem={({item}) => {
-                    const realizedExercise: RealizedExercise = item;
-                    return (
-                          <View style={styles.realizedExerciseContainer}>
 
-                              <IconButton onPress={() => removeRealizedExercise(realizedExercise.exerciseNumber)} style={styles.deleteButton} icon="trash-can-outline"/>
+              <View style={styles.realizedExercisesPreviewContainer}>
+                
+                  <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
+                  <FlatList
+                    data={realizedExercises}
+                    horizontal={true}
+                    renderItem={({item, index}) => {
+                      const cover = item.exercise.cover;
+                      let sourceCover;
 
-                              <List.Accordion
-                                  contentStyle={styles.dropdownTitle}
-                                  key={realizedExercise.exerciseNumber}
-                                  title={`${realizedExercise.exerciseNumber} - ${realizedExercise.exercise.name}`}
-                              >
-
-                                        
-                                        <DataTable>
-
-                                          <DataTable.Header>
-
-                                            <DataTable.Title numeric>Set</DataTable.Title>
-                                            <DataTable.Title numeric>Reps</DataTable.Title>
-                                            <DataTable.Title numeric>Weight</DataTable.Title>
-
-                                          </DataTable.Header>
-                                
-
-                                          <FlatList
-                                            data={realizedExercise.workingSets} 
-                                            renderItem={({item}) => {
-                                              const set = item;
-                                              return (
-                                                  <WorkingSetDataInput key={set.setNumber} set={set} 
-                                                    ex={realizedExercise} updateSetReps={updateSetReps} 
-                                                    updateSetWeight={updateSetWeight}
-                                                    setRealizedExercises={setRealizedExercises}/>
-                                              )
-                                            }}
-                                          />
-
-                                        </DataTable>
-                                        <View style={styles.buttonContainer}>
-                                          <Button icon="plus" mode="outlined" labelStyle={styles.text} onPress={() => addWorkingSet(realizedExercise.exerciseNumber)}>
-                                              add set
-                                          </Button>
-                                        </View>
-
-                              </List.Accordion>
-                          </View>
-                          )
+                      if (cover.startsWith("file://") || cover.startsWith("content://")) {
+                        sourceCover = { uri: cover };
+                      } else {
+                        sourceCover = imageRegistry[cover];
                       }
-                    }
-              />
-              <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
-            </SafeAreaView>
+
+                      return (
+                          <Pressable onPress={() => setShowedRealizedExercise(index)}>
+                              <Image style={
+                                        [ styles.realizedExercisePreview, 
+                                          {opacity: index == showedRealizedExercise ? 0.6 : 1}
+                                        ]} 
+                                    source={sourceCover}/>
+                          </Pressable>)
+                    }}
+                  />
+                      
+              </View>
+
+              {showedRealizedExercise != null && (() => {
+
+                const realized: RealizedExercise = realizedExercises[showedRealizedExercise];
+
+                return (
+                  <RealizedExerciseDetail
+                    realizedExercise={realized}
+                    setRealizedExercises={setRealizedExercises}
+                    setShowededRealizedExercise={setShowedRealizedExercise}
+                  />
+                );
+              })()}
+
+
+              
+          </SafeAreaView>
                
     
         </>
@@ -205,8 +100,17 @@ export default function RealizedExercisesList({exercises, realizedExercises, set
 
 
 const styles = StyleSheet.create({
-    realizedExercisesList: {
-      maxHeight: 230
+    
+    realizedExercisesPreviewContainer: {
+      flexDirection: "row",
+      justifyContent: "flex-start",
+      alignItems: "center"
+    },
+    realizedExercisePreview: {
+      height: 100,
+      width: 80,
+      borderColor: "#000",
+      borderWidth: 1,
     },
     buttonContainer: {
         alignItems: 'flex-start',      
@@ -216,16 +120,4 @@ const styles = StyleSheet.create({
       position: 'relative',
       flex: 1
     },
-    deleteButton: {
-      position: 'absolute',
-      top: 6,
-      left: -6,
-      zIndex: 10,
-    },
-    dropdownTitle: {
-      left: 20,
-    },
-    text: {
-        fontSize: 12
-    }
 });

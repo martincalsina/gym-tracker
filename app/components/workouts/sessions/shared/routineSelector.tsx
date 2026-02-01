@@ -13,7 +13,7 @@ export default function RoutineSelector({ routines, selectedRoutine, setSelected
 
     return (
         <>
-            <Text variant='titleSmall'>Select a routine</Text>
+            <Text variant='titleMedium'>Select a routine</Text>
 
             <View style={styles.pickerContainer}>
                 <Picker

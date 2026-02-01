@@ -1,85 +1,85 @@
 import * as SQLite from 'expo-sqlite';
 import { CreateExerciseData } from "../model/Exercise";
 
-const DEFAULT_COVER: string = "@/assets/images/noun-squat.png";
 
 export const DEFAULT_EXERCISES: CreateExerciseData[] = [
-    {
-        name: "Barbell Bench Press",
-        description: "Chest",
-        cover: DEFAULT_COVER,
-    },
-    {
-        name: "Chin Ups",
-        description: "Back",
-        cover: DEFAULT_COVER,
-    },
-    {
-        name: "Conventional Deadlift",
-        description: "Glutes & Hamstrings & Lower Back",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Barbell Squat",
-        description: "Quads & Glutes",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Barbell Biceps Curl",
-        description: "Biceps",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Cable Abs Crunch",
-        description: "Abs",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Calves Raises",
-        description: "Calves",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Smith Machine Squat",
-        description: "Quads & Glutes",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Layed Hamstring Curl",
-        description: "Hamstrings",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Dips",
-        description: "Chest",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Cable Rear Delt Fly",
-        description: "Rear Delts",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Cable Lateral Raises",
-        description: "Lateral Delts",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Stiff Legs Deadlift",
-        description: "Glutes & Hamstrings",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Incline Bench Press",
-        description: "Chest",
-        cover: DEFAULT_COVER
-    },
-    {
-        name: "Overhead Cable Triceps Extensions",
-        description: "Triceps",
-        cover: DEFAULT_COVER
-    }
-]
+  {
+    name: "Barbell Bench Press",
+    description: "Chest",
+    cover: "barbell-bench-press.png",
+  },
+  {
+    name: "Chin Ups",
+    description: "Back",
+    cover: "chin-ups.png",
+  },
+  {
+    name: "Conventional Deadlift",
+    description: "Glutes & Hamstrings & Lower Back",
+    cover: "conventional-deadlift.png",
+  },
+  {
+    name: "Barbell Squat",
+    description: "Quads & Glutes",
+    cover: "barbell-squat.png",
+  },
+  {
+    name: "Barbell Biceps Curl",
+    description: "Biceps",
+    cover: "barbell-biceps-curl.png",
+  },
+  {
+    name: "Cable Abs Crunch",
+    description: "Abs",
+    cover: "cable-abs-crunch.png",
+  },
+  {
+    name: "Calves Raises",
+    description: "Calves",
+    cover: "calves-raises.png",
+  },
+  {
+    name: "Smith Machine Squat",
+    description: "Quads & Glutes",
+    cover: "smith-machine-squat.png",
+  },
+  {
+    name: "Layed Hamstring Curl",
+    description: "Hamstrings",
+    cover: "layed-hamstring-curl.png",
+  },
+  {
+    name: "Dips",
+    description: "Chest",
+    cover: "dips.png",
+  },
+  {
+    name: "Cable Rear Delt Fly",
+    description: "Rear Delts",
+    cover: "cable-rear-delt-fly.png",
+  },
+  {
+    name: "Cable Lateral Raises",
+    description: "Lateral Delts",
+    cover: "cable-lateral-raises.png",
+  },
+  {
+    name: "Stiff Legs Deadlift",
+    description: "Glutes & Hamstrings",
+    cover: "stiff-legs-deadlift.png",
+  },
+  {
+    name: "Incline Bench Press",
+    description: "Chest",
+    cover: "incline-bench-press.png",
+  },
+  {
+    name: "Overhead Cable Triceps Extensions",
+    description: "Triceps",
+    cover: "overhead-cable-triceps-extension.png",
+  },
+];
+
 
 export async function seedDefaultExercises(db: SQLite.SQLiteDatabase) {
 

@@ -1,7 +1,7 @@
 import { RealizedExercise } from "@/app/db/model/RealizedExercise";
 import { WorkingSet } from "@/app/db/model/WorkingSet";
-import { StyleSheet } from "react-native";
-import { DataTable, IconButton, TextInput } from "react-native-paper";
+import { StyleSheet, Text, View } from "react-native";
+import { IconButton, TextInput } from "react-native-paper";
 
 type Props = {
     set: WorkingSet;
@@ -42,14 +42,17 @@ export default function WorkingSetDataInput({set, ex, updateSetReps, updateSetWe
 
     return (
         <>
-            <DataTable.Row key={set.setNumber} style={styles.row}>
+            <View key={set.setNumber} style={styles.row}>
 
                 <IconButton size={20} onPress={() => removeSet(set.setNumber)} style={styles.deleteButton} icon="trash-can-outline"/>
 
-                <DataTable.Cell numeric>{set.setNumber}</DataTable.Cell>
-                <DataTable.Cell numeric>
+                <Text style={styles.rowContent}>
+                    {set.setNumber}
+                </Text>
+                <View style={styles.rowContent}>
                         <TextInput
                         contentStyle={styles.inputValue}
+                        underlineStyle={styles.inputBoxUnderline}
                         key={1}
                         mode="flat"
                         outlineColor="#ffffff00"
@@ -59,10 +62,11 @@ export default function WorkingSetDataInput({set, ex, updateSetReps, updateSetWe
                         placeholder="reps"
                         keyboardType='numeric'
                         />
-                </DataTable.Cell>
-                <DataTable.Cell numeric>
+                </View>
+                <View style={styles.rowContent} >
                     <TextInput
                         contentStyle={styles.inputValue}
+                        underlineStyle={styles.inputBoxUnderline}
                         key={2}
                         mode="flat"
                         outlineColor="#ffffff00"
@@ -72,8 +76,8 @@ export default function WorkingSetDataInput({set, ex, updateSetReps, updateSetWe
                         placeholder="weight"
                         keyboardType="numeric"
                         />
-                </DataTable.Cell>
-            </DataTable.Row>
+                </View>
+            </View>
         </>
     )
 
@@ -83,21 +87,35 @@ const styles = StyleSheet.create({
     row: {
         position: 'relative',
         flex: 1,
+        flexDirection: 'row',
+    },
+    rowContent: {
+        flex: 1,
+        alignItems: "center",
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        justifyContent: 'center',
+        height: 50,
+        padding: 10
     },
     deleteButton: {
         position: 'absolute',
         zIndex: 10,
     },
     inputBox: {
-        height: 10,
-        //backgroundColor: 'rgba(255, 255, 255, 0)',
+        height: 25,
+        backgroundColor: 'rgba(194, 194, 194, 1)',
         width: '100%',
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
+        marginVertical: 'auto',
+    },
+    inputBoxUnderline: {
+        borderRadius: 10,
     },
     inputValue: {
-        alignSelf:'flex-end',
-        textAlign: 'right',
-        paddingHorizontal: 3,
+        //alignSelf:'flex-end',
+        textAlign: 'center',
+        //paddingHorizontal: 3,
         //backgr
     }
 })
