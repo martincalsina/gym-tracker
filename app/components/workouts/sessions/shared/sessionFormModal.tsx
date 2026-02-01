@@ -26,6 +26,8 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     
     const loadSessions = useContext(SessionsContext);
 
+    const [isSavingSession, setIsSavingSession] = useState<boolean>(false);
+
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [routines, setRoutines] = useState<Routine[]>([]);
 
@@ -56,7 +58,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     }
     
     function closeModal() {
-            setModalVisible(false);
+          setModalVisible(false);
     }
 
     function restoreValues() {
@@ -72,8 +74,14 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     }
     
     async function saveSession() {
+
+        setIsSavingSession(true);
+
         await onSave(sessionDate, realizedExercises, selectedRoutine);
         await loadSessions();   
+
+        setIsSavingSession(false);
+
         closeModal();
     }
     
@@ -119,8 +127,8 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                             <Button mode="outlined" onPress={discardChanges}>
                                 Close
                             </Button>
-                            <Button mode="outlined" onPress={saveSession}>
-                                Save
+                            <Button mode="outlined" onPress={saveSession} loading={isSavingSession}>
+                                {isSavingSession ? "" : "Save"}
                             </Button>
                         </View>
 

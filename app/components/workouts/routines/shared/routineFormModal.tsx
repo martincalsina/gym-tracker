@@ -1,7 +1,7 @@
 import { RoutinesContext } from '@/app/(tabs)/workouts/routinesContext';
 import * as ImagePicker from 'expo-image-picker';
 import { useContext, useState } from 'react';
-import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Modal, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -20,6 +20,8 @@ const DEFAULT_COVER: string = "@/assets/images/noun-squat.png";
 export default function RoutineFormModal({title, defaultName, defaultDescription, defaultCover, onSave, modalVisible, setModalVisible}: Props) {
 
     const loadRoutines = useContext(RoutinesContext);
+
+    const [isSavingRoutine, setIsSavingRoutine] = useState<boolean>(false);
 
     const [routineName, setRoutineName] = useState<string>(defaultName || "");
     const [routineDescription, setRoutineDescription] = useState<string>(defaultDescription || "");
@@ -65,8 +67,14 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
     }
 
     async function saveRoutine() {
+
+        setIsSavingRoutine(true);
+
         await onSave(routineName, routineDescription, cover);
         await loadRoutines();
+
+        setIsSavingRoutine(false);
+        
         closeModal();
     }
 
@@ -102,16 +110,12 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
                             Add Cover
                         </Button>
                         <View style={styles.buttonsContainer}>
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={discardChanges}>
-                                <Text variant='titleSmall'>Close</Text>
-                            </Pressable>
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={saveRoutine}>
-                                <Text variant='titleSmall'>Save</Text>
-                            </Pressable>
+                            <Button onPress={discardChanges}>
+                              Close
+                            </Button>
+                            <Button onPress={saveRoutine} loading={isSavingRoutine}>
+                              Save
+                            </Button>
                         </View>
                     </View>
                 </View>
