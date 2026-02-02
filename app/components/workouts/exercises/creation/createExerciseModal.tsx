@@ -4,7 +4,6 @@ import ExerciseFormModal from '../shared/ExerciseFormModal';
 type Props = {
     modalVisible: boolean;
     setModalVisible: ((arg: boolean) => void);
-    onAdd: ((arg: any) => void);
 }
 
 export default function CreateExerciseModal({modalVisible, setModalVisible}: Props) {

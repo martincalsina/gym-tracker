@@ -1,6 +1,6 @@
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import CreateRoutineModal from './createRoutineModal';
 
 export default function addRoutineButton({onAdd}: any) {
@@ -11,11 +11,11 @@ export default function addRoutineButton({onAdd}: any) {
         <>
             <CreateRoutineModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
             <View style={styles.buttonContainer}>
-                <Pressable
-                    style={[styles.button, styles.buttonOpen]}
-                    onPress={() => setModalVisible(true)}>
-                    <AntDesign name="plus" size={15} color="black" />
-                </Pressable>
+                <IconButton
+                  icon="plus"
+                  onPress={() => setModalVisible(true)}
+                  mode="contained"
+                />
             </View>
         </>
     );
@@ -23,22 +23,11 @@ export default function addRoutineButton({onAdd}: any) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    paddingHorizontal: 15,
-    paddingTop: 15,
-  },
-  button: {
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  buttonOpen: {
-    backgroundColor: '#b5b5b5ff',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    position: 'absolute',
+    bottom: 10,
+    width: '100%',
+    alignItems: 'center',
+    zIndex: 10,
+    pointerEvents: 'box-none',
   },
 });

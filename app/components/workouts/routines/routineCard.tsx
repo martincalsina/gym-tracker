@@ -34,7 +34,7 @@ export default function RoutineCard({ routine }: Props) {
 
 const styles = StyleSheet.create({
     card: {
-        marginTop: 15, 
+        marginBottom: 15, 
     },
     cardImage: {
         marginHorizontal: 10,

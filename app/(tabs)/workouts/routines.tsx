@@ -1,15 +1,17 @@
 import AddRoutineButton from "@/app/components/workouts/routines/creation/addRoutineButton";
-import RoutineCard from "@/app/components/workouts/routines/routineCard";
+import RoutinesList from "@/app/components/workouts/routines/routinesList";
 import { getAllRoutines, Routine } from '@/app/db/model/Routine';
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, Searchbar } from "react-native-paper";
 import { RoutinesContext } from "./routinesContext";
 
 export default function Routines() {
 
     const [routines, setRoutines] = useState<Routine[]>([]);
     const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
+    const [filteredRoutines, setFilteredRoutines] = useState<Routine[]>([]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
     async function loadRoutines() {
 
@@ -17,6 +19,7 @@ export default function Routines() {
 
             const data = await getAllRoutines();
             setRoutines(data);
+            setFilteredRoutines(data);
 
             setIsFetchingData(false);
     
@@ -28,21 +31,35 @@ export default function Routines() {
 
     }, []);
 
+    function resetRoutines() {
+        setFilteredRoutines(routines);
+    }
+
+    function searchRoutines() {
+
+        setFilteredRoutines(routines.filter(r => r.name.toLowerCase().includes(searchQuery.toLowerCase().trim())));
+
+    }
+
     return (
         <>
             <RoutinesContext value={loadRoutines}>
-                <View>
-                    <AddRoutineButton/>
+                <AddRoutineButton/>
+                <View style={styles.container}>
+                    <Searchbar 
+                        style={styles.searchBar}
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                        onClearIconPress={resetRoutines}
+                        onIconPress={searchRoutines}
+                        onSubmitEditing={searchRoutines}
+                        placeholder="Search"
+                    />
+                    {isFetchingData && <ActivityIndicator style={styles.loadingIcon} size="large" animating={isFetchingData}/>}
+                    <RoutinesList
+                        routines={filteredRoutines}
+                    />
                 </View>
-                {isFetchingData && <ActivityIndicator size="large" animating={isFetchingData}/>}
-                <FlatList
-                    style={styles.container}
-                    data={routines}
-                    keyExtractor={(item) => item.id!.toString()}
-                    renderItem={({ item }) => (
-                        <RoutineCard routine={item} />
-                    )}
-                />
             </RoutinesContext>
         </>
     )
@@ -53,4 +70,10 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 15
     },
+    searchBar: {
+        marginVertical: 10
+    },
+    loadingIcon: {
+        marginTop: 40
+    }
 })
