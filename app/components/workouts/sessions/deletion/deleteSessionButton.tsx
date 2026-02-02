@@ -9,15 +9,15 @@ type Props = {
 
 export default function DeleteSessionButton({session}: Props) {
 
-    const [deleteSessionModalVisible, setDeleteSessionModalVisible] = useState<boolean>(false);
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     
 
 
     return (
         <>  
             <DeleteSessionModal session={session} 
-            deleteSessionModalVisible={deleteSessionModalVisible} setDeleteSessionModalVisible={setDeleteSessionModalVisible}/>
-            <IconButton onPress={() => {setDeleteSessionModalVisible(true)}} size={20} icon='trash-can-outline'/>    
+            modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+            <IconButton onPress={() => {setModalVisible(true)}} size={20} icon='trash-can-outline'/>    
         </>
     )
 

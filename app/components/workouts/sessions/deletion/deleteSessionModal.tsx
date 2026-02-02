@@ -1,57 +1,81 @@
 import { SessionsContext } from "@/app/(tabs)/workouts/sessionsContext";
 import { deleteSessionById, Session } from "@/app/db/model/Session";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Text } from 'react-native-paper';
+import { Button, Snackbar, Text } from 'react-native-paper';
 
 type Props = {
     session: Session;
-    deleteSessionModalVisible: boolean;
-    setDeleteSessionModalVisible: (arg: boolean) => void;
+    modalVisible: boolean;
+    setModalVisible: (arg: boolean) => void;
 }
 
-export default function DeleteSessionModal({session, deleteSessionModalVisible, setDeleteSessionModalVisible}: Props) {
+export default function DeleteSessionModal({session, modalVisible, setModalVisible}: Props) {
     
     const loadSessions = useContext(SessionsContext);
 
-    function closeDeleteSessionModal() {
-        setDeleteSessionModalVisible(false);
+    const [isDeletingSession, setIsDeletingSession] = useState<boolean>(false);
+    const [isVisibleSnackBar, setIsVisibleSnackBar] = useState<boolean>(false);
+    const [feedbackText, setFeedbackText] = useState<string>("");
+
+    function closeModal() {
+        setModalVisible(false);
     }
 
     async function deleteSession() {
 
-        const sessionsRemoved = await deleteSessionById(session.id);
+        setIsDeletingSession(true);
 
-        console.log(`${sessionsRemoved} workout sessions have been removed`)
-        
-        await loadSessions();
-
-        closeDeleteSessionModal();
+        deleteSessionById(session.id)
+        .then(() => loadSessions())
+        .then(() => {
+            setFeedbackText("Session deleted");
+        })
+        .catch((e) => {
+          setFeedbackText("An error ocurred while deleting the session");
+          console.log(e.message);
+        })
+        .finally(() => {
+          setIsDeletingSession(false);
+          setIsVisibleSnackBar(true);
+          closeModal();
+        })
     }
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={deleteSessionModalVisible}
-            onRequestClose={() => {
-                setDeleteSessionModalVisible(!deleteSessionModalVisible);
-            }}>
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Text variant='titleMedium'>You are about to delete the session {session.id}. Do you want to proceed?</Text>
-                    <View style={styles.buttonsContainer}>
-                        <Button mode='outlined' onPress={closeDeleteSessionModal}>
-                            Cancel
-                        </Button>
-                        <Button mode='outlined' onPress={deleteSession}>
-                            Delete
-                        </Button>
+        <>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text variant='titleMedium'>You are about to delete the session {session.id}. Do you want to proceed?</Text>
+                        <View style={styles.buttonsContainer}>
+                            <Button mode='outlined' onPress={closeModal}>
+                                Cancel
+                            </Button>
+                            <Button loading={isDeletingSession} mode='outlined' onPress={deleteSession}>
+                                Delete
+                            </Button>
+                        </View>
                     </View>
                 </View>
-            </View>
-        </Modal>
-
+            </Modal>
+            <Snackbar
+                visible={isVisibleSnackBar}
+                onDismiss={() => setModalVisible(false)}
+                action={{
+                    label: "close",
+                    onPress: () => setModalVisible(false)
+                }}
+            >
+                {feedbackText}
+            </Snackbar>
+        </>
     )
 }
 
