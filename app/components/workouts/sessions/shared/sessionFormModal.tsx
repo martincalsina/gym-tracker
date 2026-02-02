@@ -4,7 +4,7 @@ import { RealizedExercise } from "@/app/db/model/RealizedExercise";
 import { getAllRoutines, Routine } from "@/app/db/model/Routine";
 import { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Button, Portal, Snackbar, Text } from "react-native-paper";
 import DateSelector from "./dateSelector";
 import RealizedExercisesList from "./realizedExercisesList";
 import RoutineSelector from "./routineSelector";
@@ -25,6 +25,8 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
     const loadSessions = useContext(SessionsContext);
 
     const [isSavingSession, setIsSavingSession] = useState<boolean>(false);
+    const [isVisibleSnackBar, setIsVisibleSnackBar] = useState<boolean>(false);
+    const [feedbackText, setFeedbackText] = useState<string>("");
 
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [routines, setRoutines] = useState<Routine[]>([]);
@@ -52,12 +54,21 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
 
         setIsSavingSession(true);
 
-        await onSave(sessionDate, realizedExercises, selectedRoutine);
-        await loadSessions();   
+        onSave(sessionDate, realizedExercises, selectedRoutine)
+        .then(() => loadSessions())
+        .then(() => {
+            setFeedbackText("Session succesfully saved");
+        })
+        .catch((e) => {
+          setFeedbackText("An error ocurred while saving the session");
+          console.log(e.message);
+        })
+        .finally(() => {
+          setIsSavingSession(false);
+          setIsVisibleSnackBar(true);
+          closeModal();
+        }) 
 
-        setIsSavingSession(false);
-
-        closeModal();
     }
     
     useEffect(() => {
@@ -82,6 +93,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
       }, []);
 
     return (
+          <>
             <Modal
                 animationType="slide"
                 transparent={false}
@@ -108,6 +120,20 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                           </View>
                   </View>
             </Modal>
+            <Portal>
+              <Snackbar
+                visible={isVisibleSnackBar}
+                onDismiss={() => setIsVisibleSnackBar(false)}
+                action={{ 
+                  label: 'Close',
+                  onPress: () => {
+                    setIsVisibleSnackBar(false);
+                  },
+                }}>
+                {feedbackText}
+              </Snackbar>
+            </Portal>
+          </>
     )
 }
 

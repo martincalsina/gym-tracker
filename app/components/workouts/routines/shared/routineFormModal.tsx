@@ -2,7 +2,7 @@ import { RoutinesContext } from '@/app/(tabs)/workouts/routinesContext';
 import * as ImagePicker from 'expo-image-picker';
 import { useContext, useState } from 'react';
 import { Alert, Modal, StyleSheet, View } from 'react-native';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { Button, Portal, Snackbar, Text, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
@@ -22,6 +22,8 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
     const loadRoutines = useContext(RoutinesContext);
 
     const [isSavingRoutine, setIsSavingRoutine] = useState<boolean>(false);
+    const [isVisibleSnackBar, setIsVisibleSnackBar] = useState<boolean>(false);
+    const [feedbackText, setFeedbackText] = useState<string>("");
 
     const [routineName, setRoutineName] = useState<string>(defaultName || "");
     const [routineDescription, setRoutineDescription] = useState<string>(defaultDescription || "");
@@ -70,15 +72,24 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
 
         setIsSavingRoutine(true);
 
-        await onSave(routineName, routineDescription, cover);
-        await loadRoutines();
-
-        setIsSavingRoutine(false);
-
-        closeModal();
-    }
+        onSave(routineName, routineDescription, cover)
+        .then(() => loadRoutines())
+        .then(() => {
+            setFeedbackText("Routine succesfully saved");
+        })
+        .catch((e) => {
+            setFeedbackText("An error ocurred while saving the routine");
+            console.log(e.message);
+        })
+        .finally(() => {
+          setIsSavingRoutine(false);
+          setIsVisibleSnackBar(true);
+          closeModal();
+        }) 
+        }
 
     return (
+      <>
         <Modal
             animationType="slide"
             transparent={true}
@@ -121,6 +132,20 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
                 </View>
             </SafeAreaView>
         </Modal>
+        <Portal>
+            <Snackbar
+              visible={isVisibleSnackBar}
+              onDismiss={() => setIsVisibleSnackBar(false)}
+              action={{ 
+                label: 'Close',
+                onPress: () => {
+                  setIsVisibleSnackBar(false);
+                },
+              }}>
+              {feedbackText}
+            </Snackbar>
+        </Portal>
+    </>
     )
 }
 

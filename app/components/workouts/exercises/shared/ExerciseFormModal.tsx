@@ -2,7 +2,7 @@ import { ExercisesContext } from '@/app/(tabs)/workouts/exercisesContext';
 import * as ImagePicker from 'expo-image-picker';
 import { useContext, useState } from "react";
 import { Alert, Modal, StyleSheet, View } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Button, Portal, Snackbar, Text, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -24,6 +24,8 @@ export default function EditExerciseModal({title, defaultName, defaultDescriptio
     const loadExercises = useContext(ExercisesContext);
 
     const [isSavingExercise, setIsSvaingExercise] = useState<boolean>(false);
+    const [isVisibleSnackBar, setIsVisibleSnackBar] = useState<boolean>(false);
+    const [feedbackText, setFeedbackText] = useState<string>("");
 
     const [exerciseName, setExerciseName] = useState<string>(defaultName || "");
     const [exerciseDescription, setExerciseDescription] = useState<string>(defaultDescription || "");
@@ -72,57 +74,78 @@ export default function EditExerciseModal({title, defaultName, defaultDescriptio
 
         setIsSvaingExercise(true);
 
-        await onSave(exerciseName, exerciseDescription, cover);
-        await loadExercises()
-
-        setIsSvaingExercise(false);
-
-        closeModal();
+        onSave(exerciseName, exerciseDescription, cover)
+        .then(() => loadExercises())
+        .then(() => {
+            setFeedbackText("Exercise succesfully saved");
+        })
+        .catch((e) => {
+          setFeedbackText("An error ocurred while saving the exercise");
+          console.log(e.message);
+        })
+        .finally(() => {
+          setIsSvaingExercise(false);
+          setIsVisibleSnackBar(true);
+          closeModal();
+        })
     }
 
     return (
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-                setModalVisible(!modalVisible);
-            }}>
-            <SafeAreaView style={{ flex: 1 }}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text variant='titleMedium'>{title}</Text>
-                        <TextInput
-                            style={styles.input}
-                            mode='outlined'
-                            label="Name"
-                            value={exerciseName}
-                            onChangeText={text => setExerciseName(text)}
-                        />
-                        <TextInput
-                            style={[styles.input, styles.textArea]}
-                            multiline={true}
-                            numberOfLines={6}
-                            mode='outlined'
-                            label="Description"
-                            value={exerciseDescription}
-                            onChangeText={text => setExerciseDescription(text)}
-                        />
-                        <Button icon="camera" mode="contained" onPress={pickCover}>
-                            Add Cover
-                        </Button>
-                        <View style={styles.buttonsContainer}>
-                            <Button onPress={discardChanges}>
-                                Close
-                            </Button>
-                            <Button onPress={saveExercise} loading={isSavingExercise}>
-                                {isSavingExercise ? "    " : "Save"}
-                            </Button>
-                        </View>
-                    </View>
+        <>
+          <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          } }>
+          <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text variant='titleMedium'>{title}</Text>
+                <TextInput
+                  style={styles.input}
+                  mode='outlined'
+                  label="Name"
+                  value={exerciseName}
+                  onChangeText={text => setExerciseName(text)} />
+                <TextInput
+                  style={[styles.input, styles.textArea]}
+                  multiline={true}
+                  numberOfLines={6}
+                  mode='outlined'
+                  label="Description"
+                  value={exerciseDescription}
+                  onChangeText={text => setExerciseDescription(text)} />
+                <Button icon="camera" mode="contained" onPress={pickCover}>
+                  Add Cover
+                </Button>
+                <View style={styles.buttonsContainer}>
+                  <Button onPress={discardChanges}>
+                    Close
+                  </Button>
+                  <Button onPress={saveExercise} loading={isSavingExercise}>
+                    {isSavingExercise ? "    " : "Save"}
+                  </Button>
                 </View>
-            </SafeAreaView>
+              </View>
+            </View>
+          </SafeAreaView>
         </Modal>
+        <Portal>
+            <Snackbar
+              visible={isVisibleSnackBar}
+              onDismiss={() => setIsVisibleSnackBar(false)}
+              action={{
+                label: 'Close',
+                onPress: () => {
+                  setIsVisibleSnackBar(false);
+                },
+              }}>
+              {feedbackText}
+            </Snackbar>
+        </Portal>
+      </>
     )
 }
 
