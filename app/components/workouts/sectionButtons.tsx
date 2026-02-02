@@ -38,6 +38,7 @@ export default function SectionButtons() {
 const styles = StyleSheet.create({
     container: {
         paddingTop: 10,
+        paddingHorizontal: 5,
         alignItems: 'center',
         justifyContent: 'center',
     },
