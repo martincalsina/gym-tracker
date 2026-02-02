@@ -75,7 +75,7 @@ export async function getAllSessions() {
     const db = await getDb();
 
     const sessionRows: SessionRow[] = await db.getAllAsync<SessionRow>(`
-        SELECT w.id, w.date, w.tag_id, w.routine_id FROM workoutSession AS w;
+        SELECT w.id, w.date, w.tag_id, w.routine_id FROM workoutSession AS w ORDER BY w.date DESC;
     `);
 
     const sessions: Session[] = await Promise.all(sessionRows.map(async (sessionRow: SessionRow) => {
