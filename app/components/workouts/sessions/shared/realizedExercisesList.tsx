@@ -1,6 +1,6 @@
 import { Exercise } from '@/app/db/model/Exercise';
 import { RealizedExercise } from '@/app/db/model/RealizedExercise';
-import { imageRegistry } from '@/assets/imageRegistry';
+import { imageRegistry } from '@/assets/images/exercises/imageRegistry';
 import { useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';

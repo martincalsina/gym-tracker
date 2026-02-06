@@ -1,5 +1,5 @@
 import { Exercise } from '@/app/db/model/Exercise';
-import { imageRegistry } from '@/assets/imageRegistry';
+import { imageRegistry } from '@/assets/images/exercises/imageRegistry';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text } from "react-native-paper";
 import DeleteExerciseButton from './deletion/deleteExerciseButton';
