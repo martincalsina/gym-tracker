@@ -1,6 +1,6 @@
-import AntDesign from "@expo/vector-icons/AntDesign";
 import React, { useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { IconButton } from "react-native-paper";
 import CreateSessionModal from "./createSessionModal";
 
 export default function addSessionButton() {
@@ -10,13 +10,11 @@ export default function addSessionButton() {
     return (
         <>
             <CreateSessionModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
-            <View style={styles.buttonContainer}>
-                <Pressable
-                    style={[styles.button, styles.buttonOpen]}
-                    onPress={() => setModalVisible(true)}>
-                    <AntDesign name="plus" size={15} color="black" />
-                </Pressable>
-            </View>
+            <IconButton
+              onPress={() => setModalVisible(true)}
+              icon="plus"
+              mode="outlined"
+            />
         </>
     );
 }
