@@ -1,18 +1,16 @@
 import { Session } from "@/app/db/model/Session";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Divider, IconButton, Modal, Portal, Text } from "react-native-paper";
+import { Button, Divider, IconButton, Text } from "react-native-paper";
 
-
-type Props= {
-    sessions: Session[];
-    setFilteredSessions: (arg: Session[]) => void;
-    showModal: boolean;
-    setShowModal: (arg: boolean) => void;
+type Props = {
+    setFilter: React.Dispatch<
+        React.SetStateAction<(sessions: Session[]) => Session[]>
+    >;
 }
 
-export default function FilterModal({sessions, setFilteredSessions, showModal, setShowModal}: Props) {
+export default function DateFilter({setFilter}: Props) {
 
     const [fromDate, setFromDate] = useState<Date>(new Date());
     const [usesFromDate, setUsesFromDate] = useState<boolean>(false);
@@ -22,15 +20,11 @@ export default function FilterModal({sessions, setFilteredSessions, showModal, s
     const [fromDateShow, setFromDateShow] = useState<boolean>(false);
     const [toDateShow, setToDateShow] = useState<boolean>(false);
 
-    function hideModal() {
-        setShowModal(false);
-    }
-
     function dateToString(date: Date) {
 
-        return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
-    
-    } 
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+    }
 
     function resetFromDate() {
         setUsesFromDate(false);
@@ -40,39 +34,31 @@ export default function FilterModal({sessions, setFilteredSessions, showModal, s
         setUsesToDate(false);
     }
 
-    function onCancel() {
-        setShowModal(false);
-    } 
+    useEffect(() => {
 
-    function onApply() {
+        setFilter(() => (sessions: Session[]) => {
+            let filteredSessions = sessions;
 
-        let filteredSessions = sessions;
+            if (usesFromDate) {
+                filteredSessions = filteredSessions.filter(
+                    s => s.date >= fromDate
+                );
+            }
 
-        if (usesFromDate) {
-            filteredSessions = filteredSessions.filter(s => s.date >= fromDate);
-        }
+            if (usesToDate) {
+                filteredSessions = filteredSessions.filter(
+                    s => s.date <= toDate
+                );
+            }
 
-        if (usesToDate) {
-            filteredSessions = filteredSessions.filter(s => s.date <= toDate);
-        }
-
-        setFilteredSessions(filteredSessions);
-
-        hideModal();
-
-    }
+            return filteredSessions;
+        });
+        
+    }, [usesFromDate, fromDate, usesToDate, toDate]);
 
     return (
         <>
-        <Portal>
-            <Modal visible={showModal} onDismiss={hideModal} contentContainerStyle={styles.modalContentContainer}>
-
-            
-                <Text variant="titleLarge" style={{paddingBottom: 10}}>
-                    Filters
-                </Text>
-
-                <Text variant="titleMedium">
+            <Text variant="titleMedium">
                     Date
                 </Text>
 
@@ -140,22 +126,8 @@ export default function FilterModal({sessions, setFilteredSessions, showModal, s
 
                 </View>
 
-                <Divider />
-                
-                <View style={styles.formButtonsContainer}>
-                    <Button onPress={onCancel} style={styles.cancelButton} mode="outlined">
-                        Cancel
-                    </Button>
-                    <Button onPress={onApply} style={styles.applyButton} mode="outlined">
-                        Apply
-                    </Button>
-                </View>
-            
-            </Modal>
-        </Portal>
         </>
     )
-
 }
 
 const styles = StyleSheet.create({
@@ -180,6 +152,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: "#b8b8b8ff"
     },
+     dateResetButton: {
+        margin: 0
+    },
     datePickerLabelContainer: {
         width: 35,
         //height: 20,
@@ -190,19 +165,4 @@ const styles = StyleSheet.create({
         width: '100%',
         textAlign: 'center'
     },
-    dateResetButton: {
-        margin: 0
-    },
-    formButtonsContainer: {
-        paddingTop: 20,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: 'center',
-    },
-    applyButton: {
-
-    },
-    cancelButton: {
-
-    }
 })

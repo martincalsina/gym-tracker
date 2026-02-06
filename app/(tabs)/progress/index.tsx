@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function Progress() {
   return (
     <View style={styles.container}>
-      <Text>Hola Progress</Text>
+      <Text>Coming Soon.</Text>
     </View>
   );
 }
