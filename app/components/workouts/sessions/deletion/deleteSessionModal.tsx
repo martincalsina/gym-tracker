@@ -2,7 +2,7 @@ import { SessionsContext } from "@/app/(tabs)/workouts/sessionsContext";
 import { deleteSessionById, Session } from "@/app/db/model/Session";
 import { useContext, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Snackbar, Text } from 'react-native-paper';
+import { Button, MD3Theme, Snackbar, Text, useTheme } from 'react-native-paper';
 
 type Props = {
     session: Session;
@@ -12,6 +12,9 @@ type Props = {
 
 export default function DeleteSessionModal({session, modalVisible, setModalVisible}: Props) {
     
+    const theme = useTheme();
+    const styles = createStyles(theme);
+
     const loadSessions = useContext(SessionsContext);
 
     const [isDeletingSession, setIsDeletingSession] = useState<boolean>(false);
@@ -79,7 +82,7 @@ export default function DeleteSessionModal({session, modalVisible, setModalVisib
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -87,11 +90,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.surface,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
       height: 2,

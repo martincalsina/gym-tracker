@@ -1,17 +1,26 @@
 import { StyleSheet, Text, View } from "react-native";
+import { MD3Theme, useTheme } from "react-native-paper";
 
 export default function Progress() {
+  
+  const theme = useTheme();
+  const styles = createStyles(theme);
+  
   return (
     <View style={styles.container}>
-      <Text>Coming Soon.</Text>
+      <Text style={styles.text}>Coming Soon.</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: theme.colors.background,
   },
+  text: {
+    color: theme.colors.onBackground
+  }
 })

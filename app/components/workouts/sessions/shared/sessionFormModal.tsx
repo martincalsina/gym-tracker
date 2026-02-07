@@ -4,7 +4,7 @@ import { RealizedExercise } from "@/app/db/model/RealizedExercise";
 import { getAllRoutines, Routine } from "@/app/db/model/Routine";
 import { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Portal, Snackbar, Text } from "react-native-paper";
+import { Button, MD3Theme, Portal, Snackbar, Text, useTheme } from "react-native-paper";
 import DateSelector from "./dateSelector";
 import RealizedExercisesList from "./realizedExercisesList";
 import RoutineSelector from "./routineSelector";
@@ -21,7 +21,10 @@ type Props = {
 
 export default function SessionFormModal({title, defaultDate, defaultRoutine, defaultRealizedExercises, onSave, 
                                             modalVisible, setModalVisible}: Props) {
-    
+ 
+    const theme = useTheme();
+    const styles = createStyles(theme);
+
     const loadSessions = useContext(SessionsContext);
 
     const [isSavingSession, setIsSavingSession] = useState<boolean>(false);
@@ -103,7 +106,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                 }}>
                 <View style={styles.modalContent}>
                           <Text variant='titleLarge'>{title}</Text>
-
+                        
                           <DateSelector sessionDate={sessionDate} setSessionDate={setSessionDate} />
 
                           <RoutineSelector routines={routines} selectedRoutine={selectedRoutine} setSelectedRoutine={setSelectedRoutine} />
@@ -138,17 +141,21 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
 }
 
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
   modalContent: {
     flex: 1,
     width: "100%",
     paddingHorizontal: 10,
     paddingVertical: 20,
     marginHorizontal: "auto",
+    backgroundColor: theme.colors.background,
+    justifyContent: 'space-between',
   },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    
   },
   button: {
     borderRadius: 20,

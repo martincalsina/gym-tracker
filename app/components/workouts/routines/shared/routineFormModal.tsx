@@ -2,7 +2,7 @@ import { RoutinesContext } from '@/app/(tabs)/workouts/routinesContext';
 import * as ImagePicker from 'expo-image-picker';
 import { useContext, useState } from 'react';
 import { Alert, Modal, StyleSheet, View } from 'react-native';
-import { Button, Portal, Snackbar, Text, TextInput } from 'react-native-paper';
+import { Button, MD3Theme, Portal, Snackbar, Text, TextInput, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
@@ -18,6 +18,9 @@ type Props = {
 const DEFAULT_COVER: string = "@/assets/images/noun-squat.png";
 
 export default function RoutineFormModal({title, defaultName, defaultDescription, defaultCover, onSave, modalVisible, setModalVisible}: Props) {
+
+    const theme = useTheme();
+    const styles = createStyles(theme);
 
     const loadRoutines = useContext(RoutinesContext);
 
@@ -150,7 +153,7 @@ export default function RoutineFormModal({title, defaultName, defaultDescription
 }
 
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -158,10 +161,9 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: '90%',
-    backgroundColor: 'white',
     borderRadius: 20,
     padding: 20,
-    shadowColor: '#000',
+    shadowColor: theme.colors.surface,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -169,6 +171,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    backgroundColor: theme.colors.surface,
   },
   buttonsContainer: {
     flexDirection: 'row',

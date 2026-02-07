@@ -1,7 +1,7 @@
 import { Session } from "@/app/db/model/Session";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Divider, Modal, Portal, Text } from "react-native-paper";
+import { Button, Divider, MD3Theme, Modal, Portal, Text, useTheme } from "react-native-paper";
 import DateFilter from "./dateFilter";
 
 
@@ -13,6 +13,9 @@ type Props= {
 }
 
 export default function FilterModal({sessions, setFilteredSessions, showModal, setShowModal}: Props) {
+
+    const theme = useTheme();
+    const styles = createStyles(theme);
 
     const [dateFilter, setDateFilter] = useState<(arg: Session[]) => Session[]>(() => (a: Session[]) => a);
 
@@ -68,12 +71,12 @@ export default function FilterModal({sessions, setFilteredSessions, showModal, s
 
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
     modalContentContainer: {
         paddingVertical: 30,
         paddingHorizontal: 12,
         marginHorizontal: 12,
-        backgroundColor: "#fff",
+        backgroundColor: theme.colors.surface,
     },
     formButtonsContainer: {
         paddingTop: 20,

@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         //flex: 1,
     },
     table: {
-        height: 200
+        height: 220
     },
     tableHeaderContainer: {
         flexDirection: 'row',

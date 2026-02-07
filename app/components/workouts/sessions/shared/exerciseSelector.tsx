@@ -2,7 +2,7 @@ import { Exercise } from "@/app/db/model/Exercise";
 import { imageRegistry } from "@/assets/images/exercises/imageRegistry";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
-import { Card, IconButton, Searchbar, Text } from 'react-native-paper';
+import { Card, IconButton, MD3Theme, Searchbar, Text, useTheme } from 'react-native-paper';
 
 type Props = {
     exercises: Exercise[];
@@ -10,6 +10,9 @@ type Props = {
 }
 
 export default function ExerciseSelector({exercises, addRealizedExercise}: Props) {
+
+    const theme = useTheme();
+    const styles = createStyles(theme);
 
     const [addExerciseModalVisible, setAddExerciseModalVisible] = useState<boolean>(false);
 
@@ -87,12 +90,13 @@ export default function ExerciseSelector({exercises, addRealizedExercise}: Props
 
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
     modalContent: {
         width: "100%",
         paddingHorizontal: 20,
         paddingVertical: 20,
         marginHorizontal: 'auto',
+        backgroundColor: theme.colors.surface,
         flex: 1
     },
     searchBar: {

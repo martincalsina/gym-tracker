@@ -2,7 +2,7 @@ import { ExercisesContext } from "@/app/(tabs)/workouts/exercisesContext";
 import { deleteExerciseById, Exercise } from "@/app/db/model/Exercise";
 import { useContext, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Portal, Snackbar, Text } from 'react-native-paper';
+import { Button, MD3Theme, Portal, Snackbar, Text, useTheme } from 'react-native-paper';
 
 
 type Props = {
@@ -12,6 +12,9 @@ type Props = {
 }
 
 export default function DeleteExerciseModal({exercise, modalVisible, setModalVisible}: Props) {
+
+    const theme = useTheme();
+    const styles = createStyles(theme);
 
     const loadExercises = useContext(ExercisesContext);
 
@@ -89,7 +92,7 @@ export default function DeleteExerciseModal({exercise, modalVisible, setModalVis
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme:MD3Theme) => StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -97,11 +100,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.surface,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
       height: 2,

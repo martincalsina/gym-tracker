@@ -2,7 +2,8 @@ import { RoutinesContext } from "@/app/(tabs)/workouts/routinesContext";
 import { deleteRoutineById, Routine } from "@/app/db/model/Routine";
 import { useContext, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Button, Portal, Snackbar, Text } from "react-native-paper";
+import { Button, Portal, Snackbar, Text, useTheme } from "react-native-paper";
+import { MD3Theme } from "react-native-paper/lib/typescript/types";
 
 type Props = {
     routine: Routine,
@@ -12,6 +13,9 @@ type Props = {
 
 export default function DeleteRoutineModal({routine, modalVisible, setModalVisible}: Props) {
     
+    const theme = useTheme();
+    const styles = createStyles(theme);
+
     const loadRoutines = useContext(RoutinesContext);
 
     const [isDeletingRoutine, setIsDeletingRoutine] = useState<boolean>(false);
@@ -85,7 +89,7 @@ export default function DeleteRoutineModal({routine, modalVisible, setModalVisib
     )
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -93,11 +97,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.surface,
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: theme.colors.shadow,
     shadowOffset: {
       width: 0,
       height: 2,

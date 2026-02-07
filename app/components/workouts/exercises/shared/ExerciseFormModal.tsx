@@ -2,7 +2,7 @@ import { ExercisesContext } from '@/app/(tabs)/workouts/exercisesContext';
 import * as ImagePicker from 'expo-image-picker';
 import { useContext, useState } from "react";
 import { Alert, Modal, StyleSheet, View } from "react-native";
-import { Button, Portal, Snackbar, Text, TextInput } from "react-native-paper";
+import { Button, MD3Theme, Portal, Snackbar, Text, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -20,6 +20,9 @@ type Props = {
 const DEFAULT_COVER: string = "@/assets/images/noun-squat.png";
 
 export default function EditExerciseModal({title, defaultName, defaultDescription, defaultCover, onSave,modalVisible, setModalVisible}: Props) {
+
+    const theme = useTheme();
+    const styles = createStyles(theme);
 
     const loadExercises = useContext(ExercisesContext);
 
@@ -150,7 +153,7 @@ export default function EditExerciseModal({title, defaultName, defaultDescriptio
 }
 
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) => StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -158,14 +161,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: '90%',
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.surface,
     borderRadius: 20,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowColor: theme.colors.shadow,
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -178,9 +177,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
   },
   modalText: {
     marginBottom: 15,

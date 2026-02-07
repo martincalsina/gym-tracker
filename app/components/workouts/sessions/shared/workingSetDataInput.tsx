@@ -1,7 +1,7 @@
 import { RealizedExercise } from "@/app/db/model/RealizedExercise";
 import { WorkingSet } from "@/app/db/model/WorkingSet";
 import { StyleSheet, Text, View } from "react-native";
-import { IconButton, TextInput } from "react-native-paper";
+import { IconButton, MD3Theme, TextInput, useTheme } from "react-native-paper";
 
 type Props = {
     set: WorkingSet;
@@ -13,6 +13,8 @@ type Props = {
 
 export default function WorkingSetDataInput({set, ex, updateSetReps, updateSetWeight, setRealizedExercises}: Props) {
 
+    const theme = useTheme();
+    const styles = createStyles(theme);
 
     function removeSet(setNumber: number) {
 
@@ -83,7 +85,7 @@ export default function WorkingSetDataInput({set, ex, updateSetReps, updateSetWe
 
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme: MD3Theme) =>  StyleSheet.create({
     row: {
         position: 'relative',
         flex: 1,
@@ -96,7 +98,8 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         justifyContent: 'center',
         height: 50,
-        padding: 10
+        padding: 10,
+        color: theme.colors.onBackground
     },
     deleteButton: {
         position: 'absolute',
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
     },
     inputBox: {
         height: 25,
-        backgroundColor: 'rgba(194, 194, 194, 1)',
+        backgroundColor: theme.colors.surfaceVariant,
         width: '100%',
         paddingHorizontal: 0,
         marginVertical: 'auto',
