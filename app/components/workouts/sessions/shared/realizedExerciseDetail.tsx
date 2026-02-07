@@ -1,6 +1,6 @@
 import { RealizedExercise } from "@/app/db/model/RealizedExercise";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Button, IconButton, Text } from "react-native-paper";
+import { IconButton, Text } from "react-native-paper";
 import WorkingSetDataInput from "./workingSetDataInput";
 
 type Props = {
@@ -141,18 +141,18 @@ export default function RealizedExerciseDetail({realizedExercise, setRealizedExe
                             setRealizedExercises={setRealizedExercises}
                         />
                     )}
+                    ListFooterComponent={
+                        <View style={styles.buttonContainer}>
+                            <IconButton
+                                icon="plus"
+                                size={12}
+                                mode="outlined"
+                                style={styles.button}  
+                                onPress={() => addWorkingSet(realizedExercise.exerciseNumber)}
+                            />
+                        </View>
+                    }
                 />
-            </View>
-
-            <View style={styles.buttonContainer}>
-                <Button
-                    icon="plus"
-                    mode="outlined"
-                    labelStyle={styles.text}
-                    onPress={() => addWorkingSet(realizedExercise.exerciseNumber)}
-                >
-                    add set
-                </Button>
             </View>
         </>
     )
@@ -180,9 +180,11 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         alignItems: 'flex-start',      
-        paddingVertical: 5
+    },
+    button: {
+        marginLeft: 40
     },
     text:{
-        fontSize: 16
+        fontSize: 9
     },
 })
