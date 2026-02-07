@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Divider, IconButton, Text } from "react-native-paper";
 
+// https://stackoverflow.com/questions/55621212/is-it-possible-to-react-usestate-in-react
 type Props = {
     setFilter: React.Dispatch<
         React.SetStateAction<(sessions: Session[]) => Session[]>
