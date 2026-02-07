@@ -65,10 +65,10 @@ export default function ExerciseSelector({exercises, addRealizedExercise}: Props
                                             addRealizedExercise(exercise);
                                             setAddExerciseModalVisible(false);
                                         }}>
-                                        <Card.Content>
-                                            <Text variant="titleSmall">{exercise.name}</Text>
-                                        </Card.Content>
-                                        <Card.Cover style={styles.cardImage} source={coverSource} />
+                                            <Card.Content>
+                                                <Text variant="titleSmall">{exercise.name}</Text>
+                                            </Card.Content>
+                                            <Card.Cover style={styles.cardImage} source={coverSource} />
                                         </Pressable>
                                     </Card>
                                 
