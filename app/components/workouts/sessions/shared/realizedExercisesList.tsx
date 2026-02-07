@@ -16,7 +16,6 @@ type Props = {
 
 export default function RealizedExercisesList({exercises, realizedExercises, setRealizedExercises}: Props) {
 
-    const [selectedExercise, setSelectedExercise] = useState<number>(0);
     const [showedRealizedExercise, setShowedRealizedExercise] = useState<number | null>(null);
 
     function addRealizedExercise(selectedExercise: Exercise) {
@@ -47,7 +46,7 @@ export default function RealizedExercisesList({exercises, realizedExercises, set
 
               <View style={styles.realizedExercisesPreviewContainer}>
                 
-                  <ExerciseSelector exercises={exercises} selectedExercise={selectedExercise} setSelectedExercise={setSelectedExercise} addRealizedExercise={addRealizedExercise} />
+                  <ExerciseSelector exercises={exercises} addRealizedExercise={addRealizedExercise} />
                   <FlatList
                     data={realizedExercises}
                     horizontal={true}

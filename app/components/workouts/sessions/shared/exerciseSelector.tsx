@@ -1,19 +1,28 @@
 import { Exercise } from "@/app/db/model/Exercise";
-import { Picker } from "@react-native-picker/picker";
+import { imageRegistry } from "@/assets/images/exercises/imageRegistry";
 import { useState } from "react";
-import { Modal, StyleSheet, View } from "react-native";
-import { IconButton, Text } from 'react-native-paper';
+import { FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Card, IconButton, Searchbar, Text } from 'react-native-paper';
 
 type Props = {
     exercises: Exercise[];
-    selectedExercise: number; //the exercise id in the DB
-    setSelectedExercise: (arg: number) => void;
     addRealizedExercise: (arg: Exercise) => void;
 }
 
-export default function ExerciseSelector({exercises, selectedExercise, setSelectedExercise, addRealizedExercise}: Props) {
+export default function ExerciseSelector({exercises, addRealizedExercise}: Props) {
 
     const [addExerciseModalVisible, setAddExerciseModalVisible] = useState<boolean>(false);
+
+    const [filteredExercises, setFilteredExercises] = useState<Exercise[]>(exercises);
+    const [searchQuery, setSearchQuery] = useState<string>("");
+
+    function resetExercises() {
+        setFilteredExercises(exercises);
+    }
+
+    function searchExercises() {
+        setFilteredExercises(exercises.filter(e => e.name.toLowerCase().includes(searchQuery.trim().toLowerCase())));
+    }
 
     return (
         <>
@@ -29,21 +38,43 @@ export default function ExerciseSelector({exercises, selectedExercise, setSelect
 
                     <Text variant='titleMedium'>Select an exercise</Text>
 
-                    <Picker
-                        mode="dropdown"
-                        selectedValue={selectedExercise}
-                        onValueChange={(itemValue, itemIndex) => {
-                            setSelectedExercise(itemValue);
-                            addRealizedExercise(exercises.filter((ex) => ex.id == itemValue)[0]);
-                            setAddExerciseModalVisible(false);
-                        }
-                        }>
-                        {
-                            exercises.map((ex: Exercise) => (
-                                <Picker.Item label={ex.name} value={ex.id} />
-                            ))
-                        }
-                    </Picker>
+                    <Searchbar
+                        style={styles.searchBar}
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                        onClearIconPress={resetExercises}
+                        onIconPress={searchExercises}
+                        onSubmitEditing={searchExercises}
+                        placeholder="Search"
+                    />
+
+                    <FlatList
+                        data={filteredExercises}
+                        keyExtractor={(ex) => ex.id.toString()}
+                        numColumns={2}
+                        renderItem={({ item }) => {
+
+                            const exercise = item;
+                            const coverSource = (exercise.cover.startsWith("file://") || exercise.cover.startsWith("content://")) ? { uri: exercise.cover }
+                                : imageRegistry[exercise.cover];
+
+                            return (
+                                
+                                    <Card style={styles.card}>
+                                        <Pressable onPress={() => {
+                                            addRealizedExercise(exercise);
+                                            setAddExerciseModalVisible(false);
+                                        }}>
+                                        <Card.Content>
+                                            <Text variant="titleSmall">{exercise.name}</Text>
+                                        </Card.Content>
+                                        <Card.Cover style={styles.cardImage} source={coverSource} />
+                                        </Pressable>
+                                    </Card>
+                                
+                            )
+                        }}
+                    />
 
                 </View>
             </Modal>
@@ -62,6 +93,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 20,
         marginHorizontal: 'auto',
+        flex: 1
+    },
+    searchBar: {
+        marginVertical: 10
+    },
+    card: {
+        width: '48%',
+        padding: '1%',
+        margin: '1%',
+    },
+    cardImage: {
+        width: '100%',
+        height: 160,
     },
     buttonContainer: {
         alignItems: 'flex-start',

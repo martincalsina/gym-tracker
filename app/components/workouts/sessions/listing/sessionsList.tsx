@@ -2,8 +2,8 @@ import { Session } from '@/app/db/model/Session';
 import { useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { List } from 'react-native-paper';
-import DeleteSessionButton from './deletion/deleteSessionButton';
-import EditSessionButton from './edition/editSessionButton';
+import DeleteSessionButton from '../deletion/deleteSessionButton';
+import EditSessionButton from '../edition/editSessionButton';
 import SessionDescription from './sessionDescription';
 
 type Props = {
