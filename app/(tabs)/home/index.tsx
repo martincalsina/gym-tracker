@@ -1,7 +1,8 @@
 import SessionDescription from "@/app/components/workouts/sessions/listing/sessionDescription";
+import { getMostFrequentRoutine, Routine } from "@/app/db/model/Routine";
 import { getLastSession, getSessionOnDate, Session } from "@/app/db/model/Session";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { MD3Theme, Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,6 +15,8 @@ export default function Index() {
 
   const [lastWorkout, setLastWorkout] = useState<Session | null>(null);
   const [previousWeekWorkout, setPreviousWeekWorkout] = useState<Session | null>(null);
+  const [mostFrequentRoutine, setMostFrequentRoutine] = useState<Routine | null>(null); 
+  const defaultRoutineCover = require("@/assets/images/noun-squat.png");
   
   function dateToString(date: Date) {
      return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
@@ -36,6 +39,9 @@ export default function Index() {
       const todayPreviousWeekData = await getSessionOnDate(previousWeek);
       setPreviousWeekWorkout(todayPreviousWeekData);
 
+      const mostFrequentRoutineData = await getMostFrequentRoutine();
+      setMostFrequentRoutine(mostFrequentRoutineData);
+      
     }
 
     loadData();
@@ -83,11 +89,33 @@ export default function Index() {
                 </ScrollView>
             </>
           )}
-          </View>
-
-        <View style={styles.mostImprovedExerciseContainer}>
-          <Text>Most improved exercise</Text>
         </View>
+
+        <View style={styles.mostFrequentRoutineContainer}>
+          <Text style={styles.title} variant="labelSmall">MOST FREQUENT ROUTINE</Text>
+          {mostFrequentRoutine == null
+          ? (
+              <View style={styles.placeholderContainer}>
+                <Text style={styles.placeholder} variant="bodySmall">Here you will see your most followed routine.</Text>
+              </View>
+          )
+          : (
+            <>
+              <Text variant="bodySmall" style={styles.routineName}>{mostFrequentRoutine.name}</Text>
+              <View style={styles.coverContainer}>
+                <Image 
+                  style={styles.mostFrequentRoutineCover}
+                  source={
+                    mostFrequentRoutine.cover.startsWith("@") 
+                    ? defaultRoutineCover
+                    : {uri: mostFrequentRoutine.cover}
+                  } />
+              </View>
+                
+            </>
+          )}  
+        </View>
+
       </View>
 
     </SafeAreaView>
@@ -132,19 +160,32 @@ const createStyles = (theme: MD3Theme) => StyleSheet.create({
     borderRadius: theme.roundness,
     alignItems: 'center',
   },
-  mostImprovedExerciseContainer: {
+  mostFrequentRoutineContainer: {
     flex: 1,
     height: "100%",
     flexBasis: 0,
     backgroundColor: theme.colors.surfaceVariant,
     borderRadius: theme.roundness,
-    justifyContent: 'center',
     alignItems: 'center',
+  },
+  routineName: {
+    color: theme.colors.onSurfaceVariant,
+  },
+  coverContainer: {
+    padding: 10,
+    width: "100%",
+    height: "100%",
+  },
+  mostFrequentRoutineCover: {
+    width: "100%",
+    height: 160,
+    borderRadius: theme.roundness
   },
   title: {
     color: theme.colors.primary,
     paddingHorizontal: 10,
-    paddingTop: 10
+    paddingTop: 10,
+    textAlign: 'center'
   },
   date:{
     color: theme.colors.onSurfaceVariant,

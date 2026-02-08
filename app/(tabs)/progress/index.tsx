@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import { MD3Theme, useTheme } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { MD3Theme, Text, useTheme } from "react-native-paper";
 
 export default function Progress() {
   
@@ -8,7 +8,7 @@ export default function Progress() {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Coming Soon.</Text>
+      <Text variant="titleLarge">Coming Soon.</Text>
     </View>
   );
 }

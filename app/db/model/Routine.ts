@@ -76,3 +76,19 @@ export async function getAllRoutines() {
         `);
     return routines;
 }
+
+export async function getMostFrequentRoutine() {
+
+    const db = await getDb();
+
+    const routine: Routine | null = await db.getFirstAsync<Routine>(`
+        SELECT *
+        FROM routine AS r
+        INNER JOIN workoutSession AS w ON w.routine_id = r.id
+        GROUP BY r.id
+        ORDER BY COUNT(w.id) DESC
+        LIMIT 1;
+    `);
+
+    return routine;
+}
