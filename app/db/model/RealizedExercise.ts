@@ -55,7 +55,7 @@ export async function getRealizedExercisesBySessionId(id: number) {
     const db = await getDb();
 
     const realizedExerciseRows: RealizedExerciseRow[] = await db.getAllAsync<RealizedExerciseRow>(`
-        SELECT * FROM realizedExercise AS r WHERE r.session_id = ?;
+        SELECT * FROM realizedExercise AS r WHERE r.session_id = ? ORDER BY r.exerciseNumber ASC;
     `, id);
 
     const realizedExercises: RealizedExercise[] = await Promise.all(
