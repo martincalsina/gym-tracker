@@ -70,6 +70,38 @@ export async function editSession(session: EditSessionData) {
     return;
 }
 
+export async function getLastSession() {
+
+    const db = await getDb();
+
+    const sessionRow: SessionRow | null = await db.getFirstAsync<SessionRow>(`
+        SELECT w.id, w.date, w.tag_id, w.routine_id FROM workoutSession AS w ORDER BY w.date DESC;
+    `);
+
+    if (sessionRow == null) {
+        return null;
+    }
+
+    const [realizedExercises, tag, routine] = await Promise.all(
+        [
+            getRealizedExercisesBySessionId(sessionRow.id),
+            sessionRow.tag_id ? getTagById(sessionRow.tag_id) : null,
+            getRoutineById(sessionRow.routine_id),
+        ]
+    );
+
+    const session: Session = {
+        id: sessionRow.id,
+        date: new Date(sessionRow.date),
+        tag: tag,
+        realizedExercises: realizedExercises,
+        routine: routine,
+    };
+
+    return session;
+
+}
+
 export async function getAllSessions() {
 
     const db = await getDb();
