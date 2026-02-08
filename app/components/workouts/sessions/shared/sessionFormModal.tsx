@@ -105,13 +105,18 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                     setModalVisible(!modalVisible);
                 }}>
                 <View style={styles.modalContent}>
-                          <Text variant='titleLarge'>{title}</Text>
-                        
-                          <DateSelector sessionDate={sessionDate} setSessionDate={setSessionDate} />
 
-                          <RoutineSelector routines={routines} selectedRoutine={selectedRoutine} setSelectedRoutine={setSelectedRoutine} />
+                          <View style={styles.modalInputsContainer}>
 
-                          <RealizedExercisesList exercises={exercises} realizedExercises={realizedExercises} setRealizedExercises={setRealizedExercises} />
+                            <Text variant='titleLarge'>{title}</Text>
+                          
+                            <DateSelector sessionDate={sessionDate} setSessionDate={setSessionDate} />
+
+                            <RoutineSelector routines={routines} selectedRoutine={selectedRoutine} setSelectedRoutine={setSelectedRoutine} />
+
+                            <RealizedExercisesList exercises={exercises} realizedExercises={realizedExercises} setRealizedExercises={setRealizedExercises} />
+                            
+                          </View>
 
                           <View style={styles.buttonsContainer}>
                               <Button mode="outlined" onPress={discardChanges}>
@@ -123,6 +128,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                           </View>
                   </View>
             </Modal>
+
             <Portal>
               <Snackbar
                 visible={isVisibleSnackBar}
@@ -150,6 +156,9 @@ const createStyles = (theme: MD3Theme) => StyleSheet.create({
     marginHorizontal: "auto",
     backgroundColor: theme.colors.background,
     justifyContent: 'space-between',
+  },
+  modalInputsContainer: {
+    gap: 8
   },
   buttonsContainer: {
     flexDirection: 'row',
