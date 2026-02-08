@@ -1,13 +1,15 @@
 import { RealizedExercise } from '@/app/db/model/RealizedExercise';
 import { Session } from '@/app/db/model/Session';
-import { StyleSheet } from 'react-native';
+import { StyleProp, StyleSheet, TextStyle } from 'react-native';
 import { List } from 'react-native-paper';
 
 type Props = {
     session: Session;
+    titleStyle?: StyleProp<TextStyle>; 
+    descriptionStyle?: StyleProp<TextStyle>;
 }
 
-export default function sessionDescription({session}: Props) {
+export default function sessionDescription({session, titleStyle, descriptionStyle}: Props) {
     
     return (
         <>
@@ -22,9 +24,9 @@ export default function sessionDescription({session}: Props) {
                 return (
                     <List.Item 
                     key={ex.exerciseNumber} title={exercise} description={quickDescription}
-                    titleStyle={styles.exerciseTitle} 
-                    containerStyle={styles.container}
-                    descriptionStyle={styles.exerciseDescription}
+                    titleStyle={[styles.exerciseTitle, titleStyle]} 
+                    containerStyle={[styles.container]}
+                    descriptionStyle={[styles.exerciseDescription, , descriptionStyle]}
                     />
                 )
                 }

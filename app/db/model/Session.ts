@@ -102,6 +102,55 @@ export async function getLastSession() {
 
 }
 
+function getISODayRange(date: Date) {
+  const start = new Date(date);
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(date);
+  end.setHours(23, 59, 59, 999);
+
+  return {
+    start: start.toISOString(),
+    end: end.toISOString(),
+  };
+}
+
+export async function getSessionOnDate(date: Date) {
+   
+    const db = await getDb();
+
+    const { start, end } = getISODayRange(date);
+    
+    const sessionRow: SessionRow | null = await db.getFirstAsync(`
+        SELECT w.id, w.date, w.tag_id, w.routine_id FROM workoutSession AS w WHERE w.date BETWEEN ? AND ?
+    `, [start, end]);
+
+    if (sessionRow == null) {
+        return null;
+    }
+    
+    const [realizedExercises, tag, routine] = await Promise.all(
+        [
+            getRealizedExercisesBySessionId(sessionRow.id),
+            sessionRow.tag_id ? getTagById(sessionRow.tag_id) : null,
+            getRoutineById(sessionRow.routine_id),
+        ]
+    );
+
+    const session: Session = {
+        id: sessionRow.id,
+        date: new Date(sessionRow.date),
+        tag: tag,
+        realizedExercises: realizedExercises,
+        routine: routine,
+    };
+
+    return session;
+
+
+}
+
+
 export async function getAllSessions() {
 
     const db = await getDb();

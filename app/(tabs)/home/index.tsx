@@ -1,21 +1,29 @@
 import SessionDescription from "@/app/components/workouts/sessions/listing/sessionDescription";
-import { getLastSession, Session } from "@/app/db/model/Session";
+import { getLastSession, getSessionOnDate, Session } from "@/app/db/model/Session";
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { MD3Theme, Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+
   
+  const today = new Date();
   const theme = useTheme();
   const styles = createStyles(theme);
 
   const [lastWorkout, setLastWorkout] = useState<Session | null>(null);
+  const [previousWeekWorkout, setPreviousWeekWorkout] = useState<Session | null>(null);
   
-    function dateToString(date: Date) {
-      return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
-    } 
+  function dateToString(date: Date) {
+     return `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`;
+  } 
 
+  function subtractAWeek(date: Date) {
+    const d = new Date(date);
+    d.setDate(d.getDate() - 7);
+    return d;
+  }
 
   useEffect(() => {
 
@@ -23,6 +31,10 @@ export default function Index() {
 
       const lastWorkoutData = await getLastSession();
       setLastWorkout(lastWorkoutData);
+    
+      const previousWeek = subtractAWeek(today);
+      const todayPreviousWeekData = await getSessionOnDate(previousWeek);
+      setPreviousWeekWorkout(todayPreviousWeekData);
 
     }
 
@@ -35,23 +47,43 @@ export default function Index() {
     <SafeAreaView style={styles.container}>
       
       <View style={styles.upperPartContainer}>
-          <ScrollView style={styles.lastWorkoutContainer}>
+          <Text style={styles.title} variant="titleMedium">LAST WORKOUT</Text>
             {lastWorkout == null 
-            ? (<Text>Last workout data</Text>) 
+            ? (
+              <View style={styles.placeholderContainer}>
+                <Text style={styles.placeholder} variant="bodyMedium">Here you will see your last session.</Text>
+              </View>
+            ) 
             : ( 
               <>
-                <Text style={styles.title} variant="titleMedium">{"LAST WORKOUT"}</Text>
-                <Text style={styles.date}>{`${dateToString(lastWorkout.date)} - ${lastWorkout.routine.name}`}</Text>
-                <SessionDescription session={lastWorkout}/>
-                </>
+                <Text style={styles.date} variant="labelSmall">{`${dateToString(lastWorkout.date)} - ${lastWorkout.routine.name}`}</Text>
+                <ScrollView style={styles.lastWorkoutContainer}>
+                  <SessionDescription session={lastWorkout} />
+                </ScrollView>
+              </>
               )}
-          </ScrollView>
+          
       </View>
 
       <View style={styles.lowerPartContainer}>
         <View style={styles.previousWorkoutContainer}>
-          <Text>What I did on this day the previous week</Text>
-        </View>
+          <Text style={styles.title} variant="labelSmall">{`PREVIOUS ${today.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase()}`}</Text>
+          {previousWeekWorkout == null
+          ? (
+              <View style={styles.placeholderContainer}>
+                <Text style={styles.placeholder} variant="bodySmall">Here you will see your previous week session.</Text>
+              </View>
+          )
+          : (
+            <>
+                <Text style={styles.date} variant="bodySmall">{`${dateToString(previousWeekWorkout.date)} - ${previousWeekWorkout.routine.name}`}</Text>
+                <ScrollView style={styles.lastWorkoutContainer}>
+                  <SessionDescription titleStyle={{fontSize: 13}} descriptionStyle={{fontSize: 9}}
+                  session={previousWeekWorkout} />
+                </ScrollView>
+            </>
+          )}
+          </View>
 
         <View style={styles.mostImprovedExerciseContainer}>
           <Text>Most improved exercise</Text>
@@ -98,7 +130,6 @@ const createStyles = (theme: MD3Theme) => StyleSheet.create({
     flexBasis: 0, 
     backgroundColor: theme.colors.surfaceVariant,
     borderRadius: theme.roundness,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   mostImprovedExerciseContainer: {
@@ -111,14 +142,22 @@ const createStyles = (theme: MD3Theme) => StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    color: theme.colors.onSurfaceVariant,
+    color: theme.colors.primary,
     paddingHorizontal: 10,
     paddingTop: 10
   },
   date:{
-    color: theme.colors.onSurface,
+    color: theme.colors.onSurfaceVariant,
     paddingHorizontal: 10,
-    paddingTop: 10,
+    paddingTop: 5,
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholder: {
+    textAlign: "center",
   },
   text: {
     color: theme.colors.onBackground
