@@ -11,6 +11,7 @@
     "ios": {
       "supportsTablet": true
     },
+    "platforms": ["android"],
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -53,6 +54,12 @@
         "projectId": "af89b017-a8a2-42c5-9e30-78c9b17c0917"
       }
     },
-    "owner": "martincalsina"
+    "owner": "martincalsina",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/af89b017-a8a2-42c5-9e30-78c9b17c0917"
+    }
   }
 }

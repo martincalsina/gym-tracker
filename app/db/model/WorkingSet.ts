@@ -57,7 +57,7 @@ export async function getWorkingSetsByRealizedExerciseId(id: number) {
     const db = await getDb();
 
     const workingSetRows: WorkingSetRow[] = await db.getAllAsync(`
-        SELECT * FROM workingSet AS w WHERE w.realizedExercise_id = ?;
+        SELECT * FROM workingSet AS w WHERE w.realizedExercise_id = ? ORDER BY w.setNumber ASC;
     `, id);
 
     const workingSets: WorkingSet[] = workingSetRows.map((workingSetRow) => {
