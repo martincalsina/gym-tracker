@@ -5,6 +5,7 @@ import { getAllRoutines, Routine } from "@/app/db/model/Routine";
 import { useContext, useEffect, useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import { Button, MD3Theme, Portal, Snackbar, Text, useTheme } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 import DateSelector from "./dateSelector";
 import RealizedExercisesList from "./realizedExercisesList";
 import RoutineSelector from "./routineSelector";
@@ -104,7 +105,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}>
-                <View style={styles.modalContent}>
+                <SafeAreaView style={styles.modalContent}>
 
                           <View style={styles.modalInputsContainer}>
 
@@ -126,7 +127,7 @@ export default function SessionFormModal({title, defaultDate, defaultRoutine, de
                                   {isSavingSession ? "" : "Save"}
                               </Button>
                           </View>
-                  </View>
+                  </SafeAreaView>
             </Modal>
 
             <Portal>
