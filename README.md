@@ -18,7 +18,7 @@
 
 ## Get Started
 
-### Downloading the an up to date APK
+### Downloading an up to date APK
 
 The app is built using [EAS](https://docs.expo.dev/build/introduction/), so you can send [this URL](https://expo.dev/accounts/martincalsina/projects/gym-tracker/builds/8834260d-33b0-420a-b30c-997c419e5e8f) to your device to download the APK there or by scanning the following QR:
 
