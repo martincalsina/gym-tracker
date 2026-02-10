@@ -1,50 +1,38 @@
-# Welcome to your Expo app 👋
+# Android Gym Sessions - Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Main Features: 
 
-## Get started
+- Routines editor & visualizer (name, description & image).
+- Exercises editor & visualizer, with also a bunch of exercises ready to use.
+- Workout Sessions editor (realized exercises, sets, date and routine) & visualizer.
+- Filter all of the previous by name and the workout sessions by date.
+- Completely offline.
 
-1. Install dependencies
+## Gallery:
 
+<p align="center">
+  <img src="assets/images/readme/app_exercises.jpg" width="30%" />
+  <img src="assets/images/readme/app_edition_views.jpg" width="30%" />
+  <img src="assets/images/readme/app_session_view.jpg" width="30%" />
+</p>
+
+## Get Started
+
+### Downloading the an up to date APK
+
+### Running the project as a dev
+
+The app is built entirely using React Native with Expo and some community packages. Thus, it's enough to clone locally this repository and have [Node.js](https://nodejs.org/en/download) to install the dependencies.
+
+#### 1. Install dependencies
+   In the repo's directory run:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+#### 2. Start the app
+   Just run:
    ```bash
-   npx expo start
+   npm start
    ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+   and open it on your device using [Expo Go](https://expo.dev/go) or an Android Simulator.
