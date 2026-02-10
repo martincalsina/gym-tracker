@@ -12,7 +12,7 @@
 
 <p align="center">
   <img src="assets/images/readme/app_exercises.jpg" width="30%" />
-  <img src="assets/images/readme/app_edition_views.jpg" width="30%" />
+  <img src="assets/images/readme/app_edition_view.jpg" width="30%" />
   <img src="assets/images/readme/app_session_view.jpg" width="30%" />
 </p>
 
